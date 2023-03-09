@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { TextInput, View } from "react-native";
 import styled from "styled-components/native";
-const SearchBarOverlay = () => {
+import { debouncer } from "../../../utils/debouncing";
+const SearchBarOverlay = ({ setSearchWord }) => {
+  const debouncingSearchWord = useMemo(
+    () => debouncer((value) => setSearchWord(value), 500),
+    []
+  );
+
+  const onChangeText = (text) => {
+    debouncingSearchWord(text);
+  };
+
   return (
     <Container>
-      <SearchInput placeholder="장소 검색"></SearchInput>
+      <SearchInput
+        placeholder="정류장 검색"
+        onChangeText={onChangeText}
+      ></SearchInput>
     </Container>
   );
 };
