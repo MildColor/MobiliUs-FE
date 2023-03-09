@@ -30,7 +30,7 @@ function Main() {
     }
   }, [searchBusStationDatas?.data?.stationList]);
 
-  console.log("data", searchBusStationDatas);
+  // console.log("data", searchBusStationDatas);
   useEffect(() => {
     (async () => {
       try {

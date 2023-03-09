@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo } from "react";
-import { TextInput, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
+import { REACT_APP_BASE_URL } from "@env";
+
 const SearchBarOverlay = ({ setSearchWord }) => {
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
@@ -18,6 +20,8 @@ const SearchBarOverlay = ({ setSearchWord }) => {
         placeholder="정류장 검색"
         onChangeText={onChangeText}
       ></SearchInput>
+
+      <Text>{REACT_APP_BASE_URL ?? "아 왜"}</Text>
     </Container>
   );
 };

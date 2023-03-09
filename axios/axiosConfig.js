@@ -1,7 +1,8 @@
 import axios from "axios";
+import { REACT_APP_BASE_URL } from "@env";
 
 const config = {
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: REACT_APP_BASE_URL,
   headers: {
     "Content-Type": "application/json",
     accept: "application/json",
