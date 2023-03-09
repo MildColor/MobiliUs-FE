@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import MapView from "react-native-maps";
+import { PROVIDER_GOOGLE } from "react-native-maps";
+
 import { Marker, Polyline } from "react-native-maps";
+import MapView from "react-native-maps";
 
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -60,6 +62,7 @@ function Main() {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            provider={PROVIDER_GOOGLE}
           >
             <Marker
               coordinate={{
