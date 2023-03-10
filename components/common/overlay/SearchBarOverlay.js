@@ -2,9 +2,11 @@ import React, { useCallback, useMemo } from "react";
 import { Text, TextInput, View } from "react-native";
 import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
-import { REACT_APP_BASE_URL } from "@env";
+import Constants from "expo-constants";
 
 const SearchBarOverlay = ({ setSearchWord }) => {
+  const apiUrl = Constants.expoConfig.extra.apiUrl;
+
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
     []
@@ -21,7 +23,7 @@ const SearchBarOverlay = ({ setSearchWord }) => {
         onChangeText={onChangeText}
       ></SearchInput>
 
-      <Text>{REACT_APP_BASE_URL ?? "아 왜"}</Text>
+      <Text>{apiUrl ?? "아 왜"}</Text>
     </Container>
   );
 };

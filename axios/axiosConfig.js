@@ -1,8 +1,11 @@
 import axios from "axios";
-import { REACT_APP_BASE_URL } from "@env";
+// import { REACT_APP_BASE_URL } from "@env";
+import Constants from "expo-constants";
+
+const apiUrl = Constants.expoConfig.extra.apiUrl;
 
 const config = {
-  baseURL: REACT_APP_BASE_URL,
+  baseURL: apiUrl,
   headers: {
     "Content-Type": "application/json",
     accept: "application/json",
