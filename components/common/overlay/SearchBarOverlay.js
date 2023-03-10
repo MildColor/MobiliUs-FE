@@ -5,7 +5,7 @@ import { debouncer } from "../../../utils/debouncing";
 import Constants from "expo-constants";
 
 const SearchBarOverlay = ({ setSearchWord }) => {
-  const apiUrl = Constants.expoConfig.extra.apiUrl;
+  const apiUrl = Constants.expoConfig.extra.API_URL;
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
