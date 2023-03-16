@@ -16,6 +16,7 @@ const SearchBarOverlay = ({
   setMarkers,
   setSearchWord,
   setSelectedItem,
+  setIsOpenBusArrival,
   data,
 }) => {
   const apiUrl = Constants.expoConfig.extra.API_URL;
@@ -31,7 +32,6 @@ const SearchBarOverlay = ({
   };
 
   const renderItem = ({ item }) => {
-    console.log(item);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -61,6 +61,7 @@ const SearchBarOverlay = ({
         onChangeText={onChangeText}
         onPressIn={() => {
           setIsOpenList(true);
+          setIsOpenBusArrival(false);
         }}
       />
 

@@ -13,6 +13,7 @@ import MylocationMarker from "../components/common/marker/MylocationMarker";
 
 import { useGetSearchBusStation } from "../hooks/queries/bus/useGetSearchBusStation";
 import { useGetBusArrival } from "../hooks/queries/bus/useGetBusArrival";
+import BusArrivalListOverlay from "../components/common/overlay/BusArrivalListOverlay";
 
 function Main() {
   const [markers, setMarkers] = useState([]);
@@ -21,9 +22,10 @@ function Main() {
   const [errorMsg, setErrorMsg] = useState(null);
   // 검색하기
   const [searchWord, setSearchWord] = useState("");
-  const [stationNum, setStationNum] = useState("21115");
+  const [stationNum, setStationNum] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [busArrival, setBusArrival] = useState([]);
+  const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
 
   const { data: searchBusStationDatas } = useGetSearchBusStation(searchWord);
   const { data: busArrivalDatas } = useGetBusArrival(stationNum);
@@ -57,7 +59,6 @@ function Main() {
         setLocation(location);
       } catch (e) {
         setErrorMsg("Permission to access location was denied");
-
         Alert.alert("현 위치를 찾을 수 없습니다.");
       }
     })();
@@ -77,6 +78,7 @@ function Main() {
             }}
             region={selectedItem}
             provider={PROVIDER_GOOGLE}
+            onPress={() => setIsOpenBusArrival(false)}
           >
             <Marker
               coordinate={{
@@ -85,7 +87,7 @@ function Main() {
               }}
               title={"내 위치"}
             >
-              <MylocationMarker></MylocationMarker>
+              <MylocationMarker />
             </Marker>
             {markers.map((marker, idx) => {
               return (
@@ -97,8 +99,8 @@ function Main() {
                   }}
                   title={marker.stationName}
                   onPress={() => {
-                    console.log(marker.stationNum);
                     setStationNum(marker.stationNum);
+                    setIsOpenBusArrival(true);
                   }}
                 />
               );
@@ -108,8 +110,10 @@ function Main() {
             setMarkers={setMarkers}
             setSearchWord={setSearchWord}
             setSelectedItem={setSelectedItem}
+            setIsOpenBusArrival={setIsOpenBusArrival}
             data={searchBusStationDatas?.data?.stationList}
           />
+          {isOpenBusArrival && <BusArrivalListOverlay data={busArrival} />}
         </>
       ) : (
         <View style={styles.errorView}>
