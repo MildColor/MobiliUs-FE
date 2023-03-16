@@ -12,6 +12,7 @@ import SearchBarOverlay from "../components/common/overlay/SearchBarOverlay";
 import MylocationMarker from "../components/common/marker/MylocationMarker";
 
 import { useGetSearchBusStation } from "../hooks/queries/bus/useGetSearchBusStation";
+import { useGetBusArrival } from "../hooks/queries/bus/useGetBusArrival";
 
 function Main() {
   const [markers, setMarkers] = useState([]);
@@ -20,9 +21,14 @@ function Main() {
   const [errorMsg, setErrorMsg] = useState(null);
   // 검색하기
   const [searchWord, setSearchWord] = useState("");
+  const [stationNum, setStationNum] = useState("21115");
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [busArrival, setBusArrival] = useState([]);
 
   const { data: searchBusStationDatas } = useGetSearchBusStation(searchWord);
-  console.log(searchWord);
+  const { data: busArrivalDatas } = useGetBusArrival(stationNum);
+
+  console.log("busArrival", busArrivalDatas?.data?.busList);
 
   useEffect(() => {
     if (searchBusStationDatas) {
@@ -30,7 +36,14 @@ function Main() {
     }
   }, [searchBusStationDatas?.data?.stationList]);
 
-  // console.log("data", searchBusStationDatas);
+  useEffect(() => {
+    if (busArrivalDatas) {
+      setBusArrival([...busArrivalDatas?.data?.busList]);
+    }
+  }, [busArrivalDatas?.data?.busList]);
+
+  // console.log("data", markers);
+
   useEffect(() => {
     (async () => {
       try {
@@ -62,6 +75,7 @@ function Main() {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            region={selectedItem}
             provider={PROVIDER_GOOGLE}
           >
             <Marker
@@ -76,19 +90,25 @@ function Main() {
             {markers.map((marker, idx) => {
               return (
                 <Marker
-                  key={idx}
+                  key={marker.stationId}
                   coordinate={{
                     latitude: marker.latitude,
                     longitude: marker.longitude,
                   }}
                   title={marker.stationName}
+                  onPress={() => {
+                    console.log(marker.stationNum);
+                    setStationNum(marker.stationNum);
+                  }}
                 />
               );
             })}
           </MapView>
           <SearchBarOverlay
-            searchWord={searchWord}
+            setMarkers={setMarkers}
             setSearchWord={setSearchWord}
+            setSelectedItem={setSelectedItem}
+            data={searchBusStationDatas?.data?.stationList}
           />
         </>
       ) : (
@@ -120,31 +140,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-// [
-//   {
-//     latlng: { latitude: 37.5665, longitude: 126.978 },
-//     title: "title1",
-//     description: "description1",
-//   },
-//   {
-//     latlng: { latitude: 36.815, longitude: 127.11 },
-//     title: "title2",
-//     description: "description2",
-//   },
-//   {
-//     latlng: { latitude: 37.321, longitude: 126.83 },
-//     title: "title3",
-//     description: "description3",
-//   },
-//   {
-//     latlng: { latitude: 39.019604, longitude: 125.752832 },
-//     title: "title4",
-//     description: "description4",
-//   },
-//   {
-//     latlng: { latitude: 37.5665, longitude: 127.978 },
-//     title: "title4",
-//     description: "description4",
-//   },
-// ];

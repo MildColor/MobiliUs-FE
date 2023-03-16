@@ -6,9 +6,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "env": {
-        "API_URL": "http://54.180.83.21:8080"
-      }
+      "env": {}
     },
     "preview": {
       "android": {
@@ -22,9 +20,7 @@
         "gradleCommand": ":app:assembleRelease",
         "buildType": "apk"
       },
-      "env": {
-        "API_URL": "http://54.180.83.21:8080"
-      }
+      "env": {}
     }
   },
   "submit": {
