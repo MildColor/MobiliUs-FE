@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from "react";
 import {
   FlatList,
   Image,
-  Modal,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,6 +10,7 @@ import {
 import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
 import Constants from "expo-constants";
+import RangeButton from "../button/RangeButton";
 
 const SearchBarOverlay = ({
   setMarkers,

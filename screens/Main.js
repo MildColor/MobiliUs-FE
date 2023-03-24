@@ -14,6 +14,8 @@ import MylocationMarker from "../components/common/marker/MylocationMarker";
 import { useGetSearchBusStation } from "../hooks/queries/bus/useGetSearchBusStation";
 import { useGetBusArrival } from "../hooks/queries/bus/useGetBusArrival";
 import BusArrivalListOverlay from "../components/common/overlay/BusArrivalListOverlay";
+import RangeButtonsOverlay from "../components/common/overlay/RangeButtonsOverlay";
+import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 
 function Main() {
   const [markers, setMarkers] = useState([]);
@@ -29,8 +31,17 @@ function Main() {
 
   const { data: searchBusStationDatas } = useGetSearchBusStation(searchWord);
   const { data: busArrivalDatas } = useGetBusArrival(stationNum);
+  const { data: nearbyBusStationDatas } = useGetNearbyBusStation({
+    latitude: location.coords.latitude,
+    longitude: location.coords.longitude,
+    distance: 100,
+  });
 
-  console.log("busArrival", busArrivalDatas?.data?.busList);
+  // console.log("busArrival", busArrivalDatas?.data?.busList);
+  console.log(
+    "nearbyBusStationDatas",
+    nearbyBusStationDatas?.data?.stationList
+  );
 
   useEffect(() => {
     if (searchBusStationDatas) {
@@ -106,6 +117,7 @@ function Main() {
               );
             })}
           </MapView>
+
           <SearchBarOverlay
             setMarkers={setMarkers}
             setSearchWord={setSearchWord}
@@ -113,6 +125,8 @@ function Main() {
             setIsOpenBusArrival={setIsOpenBusArrival}
             data={searchBusStationDatas?.data?.stationList}
           />
+          <RangeButtonsOverlay />
+
           {isOpenBusArrival && <BusArrivalListOverlay data={busArrival} />}
         </>
       ) : (

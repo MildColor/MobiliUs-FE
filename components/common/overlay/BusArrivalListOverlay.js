@@ -12,8 +12,6 @@ import styled from "styled-components/native";
 
 const BusArrivalListOverlay = ({ data }) => {
   const renderItem = ({ item }) => {
-    console.log(item);
-
     return (
       <TouchableOpacity onPress={() => {}}>
         <ItemWrapperView>
