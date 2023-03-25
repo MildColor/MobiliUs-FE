@@ -2,10 +2,10 @@ import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import styled from "styled-components";
 
-export function RangeButton({ children }) {
+export function RangeButton({ onPress, item, children, color, borderColor }) {
   return (
-    <Container>
-      <ButtonText>{children}</ButtonText>
+    <Container onPress={onPress} borderColor={borderColor}>
+      <ButtonText color={color}>{children}</ButtonText>
     </Container>
   );
 }
@@ -21,10 +21,10 @@ const Container = styled(TouchableOpacity)`
   background-color: white;
   border-radius: 12px;
   margin-right: 7px;
-  /* border-color: blue; */
-  /* border-width: 2px; */
+  border-color: ${(props) => props.borderColor};
+  border-width: 2px;
 `;
 const ButtonText = styled(Text)`
-  color: black;
+  color: ${(props) => props.color};
   font-weight: 600;
 `;

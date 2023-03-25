@@ -11,9 +11,26 @@ import styled from "styled-components";
 import { rangeTextsArray } from "../../../constants/buttonTexts";
 import RangeButton from "../button/RangeButton";
 
-function RangeButtonsOverlay() {
+function RangeButtonsOverlay({ setRadius }) {
+  const [selectedId, setSelectedId] = useState();
+
   const renderItem = ({ item }) => {
-    return <RangeButton onPress={() => {}}>{item.range}</RangeButton>;
+    const borderColor = item.id === selectedId ? "#F9AC38" : "white";
+    const color = item.id === selectedId ? "#F9AC38" : "black";
+
+    return (
+      <RangeButton
+        item={item}
+        onPress={() => {
+          setSelectedId(item.id);
+          setRadius(item.range);
+        }}
+        color={color}
+        borderColor={borderColor}
+      >
+        {item.text}
+      </RangeButton>
+    );
   };
 
   return (
@@ -22,7 +39,7 @@ function RangeButtonsOverlay() {
         horizontal={true}
         data={rangeTextsArray}
         renderItem={renderItem}
-        keyExtractor={(item) => item.range}
+        keyExtractor={(item) => item.id}
       />
     </Container>
   );

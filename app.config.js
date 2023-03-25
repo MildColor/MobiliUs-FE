@@ -25,7 +25,7 @@ export default () => ({
       },
       config: {
         googleMaps: {
-          apiKey: "AIzaSyA8AIIYoZqg6FECgtKm7GufzxwSRBLlX0w",
+          apiKey: process.env.apiKey,
         },
       },
       package: "com.jiwoonseo.mapprac",

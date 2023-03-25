@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { PROVIDER_GOOGLE } from "react-native-maps";
+import { Circle, PROVIDER_GOOGLE } from "react-native-maps";
 
 import { Marker, Polyline } from "react-native-maps";
 import MapView from "react-native-maps";
@@ -18,30 +18,38 @@ import RangeButtonsOverlay from "../components/common/overlay/RangeButtonsOverla
 import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 
 function Main() {
+  // 마커 찍기
   const [markers, setMarkers] = useState([]);
-  // 내위치 찍기
+  // 위치 찍기
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   // 검색하기
   const [searchWord, setSearchWord] = useState("");
   const [stationNum, setStationNum] = useState("");
+
   const [selectedItem, setSelectedItem] = useState(null);
   const [busArrival, setBusArrival] = useState([]);
   const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
+  const [radius, setRadius] = useState(0);
 
   const { data: searchBusStationDatas } = useGetSearchBusStation(searchWord);
   const { data: busArrivalDatas } = useGetBusArrival(stationNum);
-  const { data: nearbyBusStationDatas } = useGetNearbyBusStation({
-    latitude: location.coords.latitude,
-    longitude: location.coords.longitude,
-    distance: 100,
-  });
+  const { data: nearbyBusStationDatas, refetch: refetchNearbyStation } =
+    useGetNearbyBusStation({
+      // latitude: 37.3720324398,
+      latitude: location?.coords?.latitude ?? 37.5559,
+      // longitude: 126.9420278569,
+      longitude: location?.coords?.longitude ?? 126.9723,
+      distance: radius,
+    });
 
   // console.log("busArrival", busArrivalDatas?.data?.busList);
   console.log(
     "nearbyBusStationDatas",
     nearbyBusStationDatas?.data?.stationList
   );
+
+  console.log("markers", markers);
 
   useEffect(() => {
     if (searchBusStationDatas) {
@@ -55,7 +63,11 @@ function Main() {
     }
   }, [busArrivalDatas?.data?.busList]);
 
-  // console.log("data", markers);
+  useEffect(() => {
+    if (nearbyBusStationDatas) {
+      setMarkers([...nearbyBusStationDatas?.data?.stationList]);
+    }
+  }, [nearbyBusStationDatas?.data?.stationList]);
 
   useEffect(() => {
     (async () => {
@@ -100,6 +112,17 @@ function Main() {
             >
               <MylocationMarker />
             </Marker>
+
+            <Circle
+              center={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+              radius={radius}
+              strokeWidth={2}
+              strokeColor={"rgba(249, 172, 56, 0.8)"}
+              fillColor={"rgba(249, 172, 56, 0.2)"}
+            />
             {markers.map((marker, idx) => {
               return (
                 <Marker
@@ -125,7 +148,7 @@ function Main() {
             setIsOpenBusArrival={setIsOpenBusArrival}
             data={searchBusStationDatas?.data?.stationList}
           />
-          <RangeButtonsOverlay />
+          <RangeButtonsOverlay setRadius={setRadius} />
 
           {isOpenBusArrival && <BusArrivalListOverlay data={busArrival} />}
         </>

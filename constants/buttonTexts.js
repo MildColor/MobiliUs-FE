@@ -1,5 +1,6 @@
 export const rangeTextsArray = [
-  { range: "50m" },
-  { range: "100m" },
-  { range: "200m" },
+  { id: 1, text: "100m", range: 100 },
+  { id: 2, text: "200m", range: 200 },
+  { id: 3, text: "300m", range: 300 },
+  { id: 4, text: "X", range: 0 },
 ];

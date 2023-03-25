@@ -10,7 +10,6 @@ import {
 import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
 import Constants from "expo-constants";
-import RangeButton from "../button/RangeButton";
 
 const SearchBarOverlay = ({
   setMarkers,
@@ -113,6 +112,7 @@ const StationListFlatList = styled(FlatList)`
   width: 100%;
   background-color: white;
   border-radius: 15px;
+  margin-top: 15px;
 `;
 
 const ItemWrapperView = styled(View)`
