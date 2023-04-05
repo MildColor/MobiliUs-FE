@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import MapView from "react-native-maps";
+import { Circle, PROVIDER_GOOGLE } from "react-native-maps";
+
 import { Marker, Polyline } from "react-native-maps";
+import MapView from "react-native-maps";
 
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,17 +12,44 @@ import SearchBarOverlay from "../components/common/overlay/SearchBarOverlay";
 import MylocationMarker from "../components/common/marker/MylocationMarker";
 
 import { useGetSearchBusStation } from "../hooks/queries/bus/useGetSearchBusStation";
+import { useGetBusArrival } from "../hooks/queries/bus/useGetBusArrival";
+import BusArrivalListOverlay from "../components/common/overlay/BusArrivalListOverlay";
+import RangeButtonsOverlay from "../components/common/overlay/RangeButtonsOverlay";
+import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 
 function Main() {
+  // 마커 찍기
   const [markers, setMarkers] = useState([]);
-  // 내위치 찍기
+  // 위치 찍기
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   // 검색하기
   const [searchWord, setSearchWord] = useState("");
+  const [stationNum, setStationNum] = useState("");
+
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [busArrival, setBusArrival] = useState([]);
+  const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
+  const [radius, setRadius] = useState(0);
 
   const { data: searchBusStationDatas } = useGetSearchBusStation(searchWord);
-  console.log(searchWord);
+  const { data: busArrivalDatas } = useGetBusArrival(stationNum);
+  const { data: nearbyBusStationDatas, refetch: refetchNearbyStation } =
+    useGetNearbyBusStation({
+      // latitude: 37.3720324398,
+      latitude: location?.coords?.latitude ?? 37.5559,
+      // longitude: 126.9420278569,
+      longitude: location?.coords?.longitude ?? 126.9723,
+      distance: radius,
+    });
+
+  // console.log("busArrival", busArrivalDatas?.data?.busList);
+  console.log(
+    "nearbyBusStationDatas",
+    nearbyBusStationDatas?.data?.stationList
+  );
+
+  console.log("markers", markers);
 
   useEffect(() => {
     if (searchBusStationDatas) {
@@ -28,7 +57,18 @@ function Main() {
     }
   }, [searchBusStationDatas?.data?.stationList]);
 
-  console.log("data", searchBusStationDatas);
+  useEffect(() => {
+    if (busArrivalDatas) {
+      setBusArrival([...busArrivalDatas?.data?.busList]);
+    }
+  }, [busArrivalDatas?.data?.busList]);
+
+  useEffect(() => {
+    if (nearbyBusStationDatas) {
+      setMarkers([...nearbyBusStationDatas?.data?.stationList]);
+    }
+  }, [nearbyBusStationDatas?.data?.stationList]);
+
   useEffect(() => {
     (async () => {
       try {
@@ -42,7 +82,6 @@ function Main() {
         setLocation(location);
       } catch (e) {
         setErrorMsg("Permission to access location was denied");
-
         Alert.alert("현 위치를 찾을 수 없습니다.");
       }
     })();
@@ -60,6 +99,9 @@ function Main() {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            region={selectedItem}
+            provider={PROVIDER_GOOGLE}
+            onPress={() => setIsOpenBusArrival(false)}
           >
             <Marker
               coordinate={{
@@ -68,25 +110,47 @@ function Main() {
               }}
               title={"내 위치"}
             >
-              <MylocationMarker></MylocationMarker>
+              <MylocationMarker />
             </Marker>
+
+            <Circle
+              center={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+              radius={radius}
+              strokeWidth={2}
+              strokeColor={"rgba(249, 172, 56, 0.8)"}
+              fillColor={"rgba(249, 172, 56, 0.2)"}
+            />
             {markers.map((marker, idx) => {
               return (
                 <Marker
-                  key={idx}
+                  key={marker.stationId}
                   coordinate={{
                     latitude: marker.latitude,
                     longitude: marker.longitude,
                   }}
                   title={marker.stationName}
+                  onPress={() => {
+                    setStationNum(marker.stationNum);
+                    setIsOpenBusArrival(true);
+                  }}
                 />
               );
             })}
           </MapView>
+
           <SearchBarOverlay
-            searchWord={searchWord}
+            setMarkers={setMarkers}
             setSearchWord={setSearchWord}
+            setSelectedItem={setSelectedItem}
+            setIsOpenBusArrival={setIsOpenBusArrival}
+            data={searchBusStationDatas?.data?.stationList}
           />
+          <RangeButtonsOverlay setRadius={setRadius} />
+
+          {isOpenBusArrival && <BusArrivalListOverlay data={busArrival} />}
         </>
       ) : (
         <View style={styles.errorView}>
@@ -117,31 +181,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-// [
-//   {
-//     latlng: { latitude: 37.5665, longitude: 126.978 },
-//     title: "title1",
-//     description: "description1",
-//   },
-//   {
-//     latlng: { latitude: 36.815, longitude: 127.11 },
-//     title: "title2",
-//     description: "description2",
-//   },
-//   {
-//     latlng: { latitude: 37.321, longitude: 126.83 },
-//     title: "title3",
-//     description: "description3",
-//   },
-//   {
-//     latlng: { latitude: 39.019604, longitude: 125.752832 },
-//     title: "title4",
-//     description: "description4",
-//   },
-//   {
-//     latlng: { latitude: 37.5665, longitude: 127.978 },
-//     title: "title4",
-//     description: "description4",
-//   },
-// ];

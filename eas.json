@@ -5,7 +5,8 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {}
     },
     "preview": {
       "android": {
@@ -18,7 +19,8 @@
       "android": {
         "gradleCommand": ":app:assembleRelease",
         "buildType": "apk"
-      }
+      },
+      "env": {}
     }
   },
   "submit": {
