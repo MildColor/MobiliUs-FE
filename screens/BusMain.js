@@ -11,13 +11,11 @@ import * as Location from "expo-location";
 import SearchBarOverlay from "../components/common/overlay/SearchBarOverlay";
 import MylocationMarker from "../components/common/marker/MylocationMarker";
 
-import { useGetSearchBusStation } from "../hooks/queries/bus/useGetSearchBusStation";
-import { useGetBusArrival } from "../hooks/queries/bus/useGetBusArrival";
 import BusArrivalListOverlay from "../components/common/overlay/BusArrivalListOverlay";
 import RangeButtonsOverlay from "../components/common/overlay/RangeButtonsOverlay";
 import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 
-function Main() {
+function BusMain() {
   // 마커 찍기
   const [markers, setMarkers] = useState([]);
   // 위치 찍기
@@ -28,7 +26,7 @@ function Main() {
   const [stationNum, setStationNum] = useState("");
 
   const [focusedItem, setFocusedItem] = useState(null);
-  // const [busArrival, setBusArrival] = useState([]);
+
   const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
   const [radius, setRadius] = useState(0);
 
@@ -132,7 +130,7 @@ function Main() {
   );
 }
 
-export default Main;
+export default BusMain;
 
 const styles = StyleSheet.create({
   container: {
