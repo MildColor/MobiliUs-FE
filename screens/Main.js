@@ -23,16 +23,15 @@ function Main() {
   // 위치 찍기
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+
   // 검색하기
-  const [searchWord, setSearchWord] = useState("");
   const [stationNum, setStationNum] = useState("");
 
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [focusedItem, setFocusedItem] = useState(null);
   const [busArrival, setBusArrival] = useState([]);
   const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
   const [radius, setRadius] = useState(0);
 
-  const { data: searchBusStations } = useGetSearchBusStation(searchWord);
   const { data: busArrivals } = useGetBusArrival(stationNum);
   const { data: nearbyBusStations, refetch: refetchNearbyStation } =
     useGetNearbyBusStation({
@@ -47,12 +46,6 @@ function Main() {
   console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
 
   console.log("markers", markers);
-
-  useEffect(() => {
-    if (searchBusStations) {
-      setMarkers([...searchBusStations?.data?.stationList]);
-    }
-  }, [searchBusStations?.data?.stationList]);
 
   useEffect(() => {
     if (busArrivals) {
@@ -96,7 +89,7 @@ function Main() {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-            region={selectedItem}
+            region={focusedItem}
             provider={PROVIDER_GOOGLE}
             onPress={() => setIsOpenBusArrival(false)}
           >
@@ -106,18 +99,9 @@ function Main() {
                 longitude: location.coords.longitude,
               }}
               title={"내 위치"}
+              radius={radius}
             />
 
-            <Circle
-              center={{
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-              }}
-              radius={radius}
-              strokeWidth={2}
-              strokeColor={"rgba(249, 172, 56, 0.8)"}
-              fillColor={"rgba(249, 172, 56, 0.2)"}
-            />
             {markers.map((marker, idx) => {
               return (
                 <Marker
@@ -138,10 +122,8 @@ function Main() {
 
           <SearchBarOverlay
             setMarkers={setMarkers}
-            setSearchWord={setSearchWord}
-            setSelectedItem={setSelectedItem}
+            setFocusedItem={setFocusedItem}
             setIsOpenBusArrival={setIsOpenBusArrival}
-            data={searchBusStations?.data?.stationList}
           />
           <RangeButtonsOverlay setRadius={setRadius} />
 

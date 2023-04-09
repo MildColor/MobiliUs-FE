@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlatList,
   Image,
@@ -10,17 +10,21 @@ import {
 import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
 import Constants from "expo-constants";
+import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchBusStation";
 
 const SearchBarOverlay = ({
   setMarkers,
-  setSearchWord,
-  setSelectedItem,
+  // setSearchWord,
+  setFocusedItem,
   setIsOpenBusArrival,
-  data,
+  // data,
 }) => {
-  const apiUrl = Constants.expoConfig.extra.API_URL;
-
+  // const apiUrl = Constants.expoConfig.extra.API_URL;
+  const [searchWord, setSearchWord] = useState("");
   const [isOpenList, setIsOpenList] = useState(false);
+
+  const { data: searchBusStations } = useGetSearchBusStation(searchWord);
+
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
     []
@@ -30,13 +34,19 @@ const SearchBarOverlay = ({
     debouncingSearchWord(text);
   };
 
+  useEffect(() => {
+    if (searchBusStations) {
+      setMarkers([...searchBusStations?.data?.stationList]);
+    }
+  }, [searchBusStations?.data?.stationList]);
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() => {
           setIsOpenList(false);
           setMarkers([{ ...item }]);
-          setSelectedItem({
+          setFocusedItem({
             latitude: item.latitude,
             longitude: item.longitude,
             latitudeDelta: 0.01,
@@ -64,13 +74,13 @@ const SearchBarOverlay = ({
         }}
       />
 
-      <Text>{apiUrl ?? "아 왜"}</Text>
+      {/* <Text>{apiUrl ?? "아 왜"}</Text> */}
 
-      {isOpenList && data?.length !== 0 && (
+      {isOpenList && searchBusStations?.data?.stationList?.length !== 0 && (
         <>
           <StationListFlatList
             renderItem={renderItem}
-            data={data}
+            data={searchBusStations?.data?.stationList}
             keyExtractor={(item) => item.stationId}
           />
           <CloseButton onPress={() => setIsOpenList(!isOpenList)}>
