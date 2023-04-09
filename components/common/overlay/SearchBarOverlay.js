@@ -14,10 +14,8 @@ import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchB
 
 const SearchBarOverlay = ({
   setMarkers,
-  // setSearchWord,
   setFocusedItem,
   setIsOpenBusArrival,
-  // data,
 }) => {
   // const apiUrl = Constants.expoConfig.extra.API_URL;
   const [searchWord, setSearchWord] = useState("");

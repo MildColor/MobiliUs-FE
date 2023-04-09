@@ -9,8 +9,11 @@ import {
   View,
 } from "react-native";
 import styled from "styled-components/native";
+import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
 
-const BusArrivalListOverlay = ({ data }) => {
+const BusArrivalListOverlay = ({ stationNum }) => {
+  const { data: busArrivals } = useGetBusArrival(stationNum);
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => {}}>
@@ -33,7 +36,7 @@ const BusArrivalListOverlay = ({ data }) => {
     <Container>
       <ArrivalListFlatList
         renderItem={renderItem}
-        data={data}
+        data={busArrivals?.data?.busList}
         keyExtractor={(item, idx) =>
           `${item.busRouteId + item.direction + idx}`
         }

@@ -28,30 +28,20 @@ function Main() {
   const [stationNum, setStationNum] = useState("");
 
   const [focusedItem, setFocusedItem] = useState(null);
-  const [busArrival, setBusArrival] = useState([]);
+  // const [busArrival, setBusArrival] = useState([]);
   const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
   const [radius, setRadius] = useState(0);
 
-  const { data: busArrivals } = useGetBusArrival(stationNum);
   const { data: nearbyBusStations, refetch: refetchNearbyStation } =
     useGetNearbyBusStation({
-      // latitude: 37.3720324398,
       latitude: location?.coords?.latitude ?? 37.5559,
-      // longitude: 126.9420278569,
       longitude: location?.coords?.longitude ?? 126.9723,
       distance: radius,
     });
 
-  // console.log("busArrival", busArrivals?.data?.busList);
   console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
 
   console.log("markers", markers);
-
-  useEffect(() => {
-    if (busArrivals) {
-      setBusArrival([...busArrivals?.data?.busList]);
-    }
-  }, [busArrivals?.data?.busList]);
 
   useEffect(() => {
     if (nearbyBusStations) {
@@ -127,7 +117,9 @@ function Main() {
           />
           <RangeButtonsOverlay setRadius={setRadius} />
 
-          {isOpenBusArrival && <BusArrivalListOverlay data={busArrival} />}
+          {isOpenBusArrival && (
+            <BusArrivalListOverlay stationNum={stationNum} />
+          )}
         </>
       ) : (
         <View style={styles.errorView}>
