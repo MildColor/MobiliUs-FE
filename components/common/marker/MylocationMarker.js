@@ -1,12 +1,21 @@
 import React from "react";
 import { View, Image } from "react-native";
+import { Marker } from "react-native-maps";
 import styled from "styled-components/native";
 
-const MylocationMarker = () => {
+const MylocationMarker = ({ coordinate, title }) => {
   return (
-    <ImageContainer>
-      <StImage source={{ uri: "https://ifh.cc/g/BqGBlm.png" }}></StImage>
-    </ImageContainer>
+    <Marker
+      coordinate={{
+        latitude: coordinate.latitude,
+        longitude: coordinate.longitude,
+      }}
+      title={title}
+    >
+      <ImageContainer>
+        <StImage source={{ uri: "https://ifh.cc/g/BqGBlm.png" }}></StImage>
+      </ImageContainer>
+    </Marker>
   );
 };
 
