@@ -32,9 +32,9 @@ function Main() {
   const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
   const [radius, setRadius] = useState(0);
 
-  const { data: searchBusStationDatas } = useGetSearchBusStation(searchWord);
-  const { data: busArrivalDatas } = useGetBusArrival(stationNum);
-  const { data: nearbyBusStationDatas, refetch: refetchNearbyStation } =
+  const { data: searchBusStations } = useGetSearchBusStation(searchWord);
+  const { data: busArrivals } = useGetBusArrival(stationNum);
+  const { data: nearbyBusStations, refetch: refetchNearbyStation } =
     useGetNearbyBusStation({
       // latitude: 37.3720324398,
       latitude: location?.coords?.latitude ?? 37.5559,
@@ -43,31 +43,28 @@ function Main() {
       distance: radius,
     });
 
-  // console.log("busArrival", busArrivalDatas?.data?.busList);
-  console.log(
-    "nearbyBusStationDatas",
-    nearbyBusStationDatas?.data?.stationList
-  );
+  // console.log("busArrival", busArrivals?.data?.busList);
+  console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
 
   console.log("markers", markers);
 
   useEffect(() => {
-    if (searchBusStationDatas) {
-      setMarkers([...searchBusStationDatas?.data?.stationList]);
+    if (searchBusStations) {
+      setMarkers([...searchBusStations?.data?.stationList]);
     }
-  }, [searchBusStationDatas?.data?.stationList]);
+  }, [searchBusStations?.data?.stationList]);
 
   useEffect(() => {
-    if (busArrivalDatas) {
-      setBusArrival([...busArrivalDatas?.data?.busList]);
+    if (busArrivals) {
+      setBusArrival([...busArrivals?.data?.busList]);
     }
-  }, [busArrivalDatas?.data?.busList]);
+  }, [busArrivals?.data?.busList]);
 
   useEffect(() => {
-    if (nearbyBusStationDatas) {
-      setMarkers([...nearbyBusStationDatas?.data?.stationList]);
+    if (nearbyBusStations) {
+      setMarkers([...nearbyBusStations?.data?.stationList]);
     }
-  }, [nearbyBusStationDatas?.data?.stationList]);
+  }, [nearbyBusStations?.data?.stationList]);
 
   useEffect(() => {
     (async () => {
@@ -103,15 +100,13 @@ function Main() {
             provider={PROVIDER_GOOGLE}
             onPress={() => setIsOpenBusArrival(false)}
           >
-            <Marker
+            <MylocationMarker
               coordinate={{
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
               }}
               title={"내 위치"}
-            >
-              <MylocationMarker />
-            </Marker>
+            />
 
             <Circle
               center={{
@@ -146,7 +141,7 @@ function Main() {
             setSearchWord={setSearchWord}
             setSelectedItem={setSelectedItem}
             setIsOpenBusArrival={setIsOpenBusArrival}
-            data={searchBusStationDatas?.data?.stationList}
+            data={searchBusStations?.data?.stationList}
           />
           <RangeButtonsOverlay setRadius={setRadius} />
 
