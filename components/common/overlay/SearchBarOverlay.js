@@ -120,7 +120,7 @@ const StationListFlatList = styled(FlatList)`
   width: 100%;
   background-color: white;
   border-radius: 15px;
-  margin-top: 15px;
+  margin-top: 45px;
 `;
 
 const ItemWrapperView = styled(View)`
