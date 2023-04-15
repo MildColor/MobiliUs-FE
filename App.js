@@ -1,29 +1,50 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+
 import BusMain from "./screens/BusMain";
 import SubwayMain from "./screens/SubwayMain";
 
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
 const queryClient = new QueryClient();
-const Stack = createNativeStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="BusMain">
-            <Stack.Screen
+          <Tab.Navigator initialRouteName="BusMain" shifting={true}>
+            <Tab.Screen
               name="Bus"
               component={BusMain}
-              options={{ headerShown: false }}
+              options={{
+                headerShown: false,
+                tabBarIcon: ({ color, size = 26 }) => (
+                  <MaterialCommunityIcons
+                    name="bus"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
             />
-            <Stack.Screen
+            <Tab.Screen
               name="Subway"
               component={SubwayMain}
-              options={{ headerShown: false }}
+              options={{
+                headerShown: false,
+                tabBarIcon: ({ color, size = 26 }) => (
+                  <MaterialCommunityIcons
+                    name="subway-variant"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
             />
-          </Stack.Navigator>
+          </Tab.Navigator>
         </NavigationContainer>
       </QueryClientProvider>
     </>

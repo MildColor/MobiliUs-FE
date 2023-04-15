@@ -1,7 +1,8 @@
 import React from "react";
+import { Text } from "react-native";
 
 function SubwayMain() {
-  return <div>SubwayMain</div>;
+  return <Text>hi</Text>;
 }
 
 export default SubwayMain;
