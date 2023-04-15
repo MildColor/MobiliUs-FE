@@ -15,7 +15,7 @@ export default function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <Tab.Navigator initialRouteName="BusMain" shifting={true}>
+          <Tab.Navigator initialRouteName="Subway" shifting={true}>
             <Tab.Screen
               name="Bus"
               component={BusMain}
