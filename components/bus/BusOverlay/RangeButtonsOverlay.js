@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import styled from "styled-components";
 import { rangeTextsArray } from "../../../constants/buttonTexts";
-import RangeButton from "../button/RangeButton";
+import RangeButton from "../../common/button/RangeButton";
 
 function RangeButtonsOverlay({ setRadius }) {
   const [selectedId, setSelectedId] = useState();

@@ -8,12 +8,12 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-import SearchBarOverlay from "../components/common/overlay/SearchBarOverlay";
 import MylocationMarker from "../components/common/marker/MylocationMarker";
-
-import BusArrivalListOverlay from "../components/common/overlay/BusArrivalListOverlay";
-import RangeButtonsOverlay from "../components/common/overlay/RangeButtonsOverlay";
 import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
+
+import SearchBarOverlay from "../components/bus/BusOverlay/SearchBarOverlay";
+import BusArrivalListOverlay from "../components/bus/BusOverlay/BusArrivalListOverlay";
+import RangeButtonsOverlay from "../components/bus/BusOverlay/RangeButtonsOverlay";
 
 function BusMain() {
   // 마커 찍기

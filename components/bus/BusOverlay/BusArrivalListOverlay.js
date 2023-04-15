@@ -69,8 +69,7 @@ const Container = styled(View)`
   width: 100%;
   height: 70%;
   bottom: 50px;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding: 0 7%;
   margin-top: 10px;
 `;
 

@@ -11,5 +11,8 @@ export const useGetNearbyBusStation = ({ longitude, latitude, distance }) => {
         distance,
       });
     },
+    onError: async (error) => {
+      console.log("getNearbyBusStation", error);
+    },
   });
 };
