@@ -17,6 +17,7 @@ import SearchBarOverlay from "../components/bus/BusOverlay/SearchBarOverlay";
 import BusArrivalListOverlay from "../components/bus/BusOverlay/BusArrivalListOverlay";
 import RangeButtonsOverlay from "../components/bus/BusOverlay/RangeButtonsOverlay";
 import { LocationContext } from "../contexts/Location/LocationContext";
+import MapViewLayout from "../components/Layout/MapViewLayout";
 
 function BusMain() {
   // location context, 내 위치 저장
@@ -31,7 +32,7 @@ function BusMain() {
   // 검색하기
   const [stationNum, setStationNum] = useState("");
 
-  const [focusedItem, setFocusedItem] = useState({
+  const [focusedRegion, setFocusedRegion] = useState({
     latitude: 0,
     longitude: 0,
     latitudeDelta: 0.01,
@@ -68,7 +69,7 @@ function BusMain() {
 
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
-        setFocusedItem({
+        setFocusedRegion({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
           latitudeDelta: 0.01,
@@ -82,61 +83,49 @@ function BusMain() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      {location !== null ? (
-        <>
-          <MapView
-            style={styles.map}
-            region={focusedItem}
-            provider={PROVIDER_GOOGLE}
-            onPress={() => setIsOpenBusArrival(false)}
-          >
-            <MylocationMarker
+    <>
+      <MapViewLayout
+        region={focusedRegion}
+        onPress={() => setIsOpenBusArrival(false)}
+      >
+        <MylocationMarker
+          coordinate={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          }}
+          title={"내 위치"}
+          radius={radius}
+        />
+
+        {markers.map((marker, idx) => {
+          return (
+            <Marker
+              key={marker.stationId}
               coordinate={{
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
+                latitude: marker.latitude,
+                longitude: marker.longitude,
               }}
-              title={"내 위치"}
-              radius={radius}
+              title={marker.stationName}
+              onPress={() => {
+                setStationNum(marker.stationNum);
+                setIsOpenBusArrival(true);
+              }}
             />
+          );
+        })}
+      </MapViewLayout>
+      <SearchBarOverlay
+        setMarkers={setMarkers}
+        setFocusedRegion={setFocusedRegion}
+        setIsOpenBusArrival={setIsOpenBusArrival}
+      />
+      <RangeButtonsOverlay
+        setRadius={setRadius}
+        setFocusedRegion={setFocusedRegion}
+      />
 
-            {markers.map((marker, idx) => {
-              return (
-                <Marker
-                  key={marker.stationId}
-                  coordinate={{
-                    latitude: marker.latitude,
-                    longitude: marker.longitude,
-                  }}
-                  title={marker.stationName}
-                  onPress={() => {
-                    setStationNum(marker.stationNum);
-                    setIsOpenBusArrival(true);
-                  }}
-                />
-              );
-            })}
-          </MapView>
-
-          <SearchBarOverlay
-            setMarkers={setMarkers}
-            setFocusedItem={setFocusedItem}
-            setIsOpenBusArrival={setIsOpenBusArrival}
-          />
-          <RangeButtonsOverlay setRadius={setRadius} />
-
-          {isOpenBusArrival && (
-            <BusArrivalListOverlay stationNum={stationNum} />
-          )}
-        </>
-      ) : (
-        <View style={styles.errorView}>
-          <Text>{errorMsg}</Text>
-        </View>
-      )}
-
-      <StatusBar style="auto" />
-    </SafeAreaView>
+      {isOpenBusArrival && <BusArrivalListOverlay stationNum={stationNum} />}
+    </>
   );
 }
 
