@@ -6,7 +6,8 @@ function Overlay({
   children,
   width = "100%",
   height,
-  top,
+  top = "auto",
+  bottom = "auto",
   xPadding = 0,
   yPadding = 0,
   ...props
@@ -16,6 +17,7 @@ function Overlay({
       width={width}
       height={height}
       top={top}
+      bottom={bottom}
       xPadding={xPadding}
       yPadding={yPadding}
       {...props}
@@ -31,8 +33,9 @@ const OverlayWrapper = styled(View)`
   display: flex;
   position: absolute;
   align-items: center;
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  top: ${(props) => props.top};
+  width: ${({ width }) => width};
+  height: ${({ height }) => height};
+  top: ${({ top }) => top};
+  bottom: ${({ bottom }) => bottom};
   padding: ${({ xPadding, yPadding }) => `${xPadding + " " + yPadding} `};
 `;

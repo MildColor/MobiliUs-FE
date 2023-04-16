@@ -11,6 +11,7 @@ import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
 import Constants from "expo-constants";
 import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchBusStation";
+import Overlay from "../../common/overlay/Overlay";
 
 const SearchBarOverlay = ({
   setMarkers,
@@ -60,7 +61,7 @@ const SearchBarOverlay = ({
   };
 
   return (
-    <Container>
+    <Overlay height="70%" top="40px" yPadding="13%">
       <SearchInput
         placeholder="정류장 검색"
         onChangeText={onChangeText}
@@ -84,23 +85,11 @@ const SearchBarOverlay = ({
           </CloseButton>
         </>
       )}
-    </Container>
+    </Overlay>
   );
 };
 
 export default SearchBarOverlay;
-
-const Container = styled(View)`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  width: 100%;
-  height: 70%;
-  top: 30px;
-  padding-left: 13%;
-  padding-right: 13%;
-  margin-top: 10px;
-`;
 
 const SearchInput = styled(TextInput)`
   width: 100%;

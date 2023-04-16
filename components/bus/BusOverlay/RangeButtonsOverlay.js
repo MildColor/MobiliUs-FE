@@ -11,6 +11,7 @@ import styled from "styled-components";
 import { rangeTextsArray } from "../../../constants/buttonTexts";
 import RangeButton from "../../common/button/RangeButton";
 import { LocationContext } from "../../../contexts/Location/LocationContext";
+import Overlay from "../../common/overlay/Overlay";
 
 function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
   const { location } = useContext(LocationContext);
@@ -45,30 +46,18 @@ function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
   };
 
   return (
-    <Container>
+    <Overlay height="30px" top="95px" yPadding="13%">
       <ButtonsFlatList
         horizontal={true}
         data={rangeTextsArray}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
-    </Container>
+    </Overlay>
   );
 }
 
 export default RangeButtonsOverlay;
-
-const Container = styled(View)`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  width: 100%;
-  height: 30px;
-  top: 85px;
-  padding-left: 13%;
-  padding-right: 13%;
-  margin-top: 10px;
-`;
 
 const ButtonsFlatList = styled(FlatList)`
   width: 100%;

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
+import Overlay from "../../common/overlay/Overlay";
 
 const BusArrivalListOverlay = ({ stationNum }) => {
   const { data: busArrivals } = useGetBusArrival(stationNum);
@@ -33,7 +34,7 @@ const BusArrivalListOverlay = ({ stationNum }) => {
   };
 
   return (
-    <Container>
+    <Overlay height="70%" bottom="40px" yPadding="7%">
       <ArrivalListFlatList
         renderItem={renderItem}
         data={busArrivals?.data?.busList}
@@ -56,22 +57,11 @@ const BusArrivalListOverlay = ({ stationNum }) => {
           </>
         }
       />
-    </Container>
+    </Overlay>
   );
 };
 
 export default BusArrivalListOverlay;
-
-const Container = styled(View)`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  width: 100%;
-  height: 70%;
-  bottom: 50px;
-  padding: 0 7%;
-  margin-top: 10px;
-`;
 
 const ArrivalListFlatList = styled(FlatList)`
   width: 100%;
