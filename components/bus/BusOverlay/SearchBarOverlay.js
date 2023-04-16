@@ -14,7 +14,7 @@ import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchB
 
 const SearchBarOverlay = ({
   setMarkers,
-  setFocusedItem,
+  setFocusedRegion,
   setIsOpenBusArrival,
 }) => {
   // const apiUrl = Constants.expoConfig.extra.API_URL;
@@ -44,7 +44,7 @@ const SearchBarOverlay = ({
         onPress={() => {
           setIsOpenList(false);
           setMarkers([{ ...item }]);
-          setFocusedItem({
+          setFocusedRegion({
             latitude: item.latitude,
             longitude: item.longitude,
             latitudeDelta: 0.01,
@@ -70,11 +70,9 @@ const SearchBarOverlay = ({
         }}
       />
 
-      {/* <Text>{apiUrl ?? "아 왜"}</Text> */}
-
       {isOpenList && searchBusStations?.data?.stationList?.length !== 0 && (
         <>
-          <StationListFlatList
+          <StationFlatList
             renderItem={renderItem}
             data={searchBusStations?.data?.stationList}
             keyExtractor={(item) => item.stationId}
@@ -109,12 +107,11 @@ const SearchInput = styled(TextInput)`
   height: 40px;
   background-color: gainsboro;
   border-radius: 15px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 0 15px;
   margin-top: 10px;
 `;
 
-const StationListFlatList = styled(FlatList)`
+const StationFlatList = styled(FlatList)`
   width: 100%;
   background-color: white;
   border-radius: 15px;
@@ -125,7 +122,6 @@ const ItemWrapper = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
   padding-left: 10px;
   padding-right: 10px;
   margin-top: 13px;
@@ -141,9 +137,9 @@ const CloseButton = styled(TouchableOpacity)`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
   width: 100%;
   height: 20px;
-  background-color: white;
   margin-top: 5px;
   border-radius: 10px;
 `;

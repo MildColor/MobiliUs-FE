@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FlatList,
   Image,
@@ -10,9 +10,23 @@ import {
 import styled from "styled-components";
 import { rangeTextsArray } from "../../../constants/buttonTexts";
 import RangeButton from "../../common/button/RangeButton";
+import { LocationContext } from "../../../contexts/Location/LocationContext";
 
-function RangeButtonsOverlay({ setRadius }) {
+function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
+  const { location } = useContext(LocationContext);
+
   const [selectedId, setSelectedId] = useState();
+
+  const onPressItem = (item) => {
+    setSelectedId(item.id);
+    setRadius(item.range);
+    setFocusedRegion({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    });
+  };
 
   const renderItem = ({ item }) => {
     const borderColor = item.id === selectedId ? "#F9AC38" : "white";
@@ -21,10 +35,7 @@ function RangeButtonsOverlay({ setRadius }) {
     return (
       <RangeButton
         item={item}
-        onPress={() => {
-          setSelectedId(item.id);
-          setRadius(item.range);
-        }}
+        onPress={() => onPressItem(item)}
         color={color}
         borderColor={borderColor}
       >
