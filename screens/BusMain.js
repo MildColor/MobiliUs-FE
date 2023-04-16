@@ -1,45 +1,55 @@
-import { StatusBar } from "expo-status-bar";
-import { Circle, PROVIDER_GOOGLE } from "react-native-maps";
-
-import { Marker, Polyline } from "react-native-maps";
-import MapView from "react-native-maps";
-
+import { useContext, useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
+import MapView, {
+  Circle,
+  PROVIDER_GOOGLE,
+  Marker,
+  Polyline,
+} from "react-native-maps";
 import * as Location from "expo-location";
-import MylocationMarker from "../components/common/marker/MylocationMarker";
+import { StatusBar } from "expo-status-bar";
+
 import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 
+import MylocationMarker from "../components/common/marker/MylocationMarker";
 import SearchBarOverlay from "../components/bus/BusOverlay/SearchBarOverlay";
 import BusArrivalListOverlay from "../components/bus/BusOverlay/BusArrivalListOverlay";
 import RangeButtonsOverlay from "../components/bus/BusOverlay/RangeButtonsOverlay";
+import { LocationContext } from "../contexts/Location/LocationContext";
 
 function BusMain() {
+  // location context, 내 위치 저장
+  const { location, setLocation } = useContext(LocationContext);
+  // console.log(location);
   // 마커 찍기
   const [markers, setMarkers] = useState([]);
   // 위치 찍기
-  const [location, setLocation] = useState(null);
+  // const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
   // 검색하기
   const [stationNum, setStationNum] = useState("");
 
-  const [focusedItem, setFocusedItem] = useState(null);
+  const [focusedItem, setFocusedItem] = useState({
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
 
   const [isOpenBusArrival, setIsOpenBusArrival] = useState(false);
   const [radius, setRadius] = useState(0);
 
-  const { data: nearbyBusStations, refetch: refetchNearbyStation } =
-    useGetNearbyBusStation({
-      latitude: location?.coords?.latitude ?? 37.5559,
-      longitude: location?.coords?.longitude ?? 126.9723,
-      distance: radius,
-    });
+  const { data: nearbyBusStations } = useGetNearbyBusStation({
+    latitude: location?.coords?.latitude ?? 37.5559,
+    longitude: location?.coords?.longitude ?? 126.9723,
+    distance: radius,
+  });
 
-  console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
+  // console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
 
-  console.log("markers", markers);
+  // console.log("markers", markers);
 
   useEffect(() => {
     if (nearbyBusStations) {
@@ -58,6 +68,12 @@ function BusMain() {
 
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
+        setFocusedItem({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
       } catch (e) {
         setErrorMsg("Permission to access location was denied");
         Alert.alert("현 위치를 찾을 수 없습니다.");
@@ -71,12 +87,6 @@ function BusMain() {
         <>
           <MapView
             style={styles.map}
-            initialRegion={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
             region={focusedItem}
             provider={PROVIDER_GOOGLE}
             onPress={() => setIsOpenBusArrival(false)}

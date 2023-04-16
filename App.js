@@ -6,6 +6,7 @@ import BusMain from "./screens/BusMain";
 import SubwayMain from "./screens/SubwayMain";
 
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import LocationProvider from "./contexts/Location/LocationProvider";
 
 const queryClient = new QueryClient();
 const Tab = createMaterialBottomTabNavigator();
@@ -14,38 +15,40 @@ export default function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Tab.Navigator initialRouteName="Subway" shifting={true}>
-            <Tab.Screen
-              name="Bus"
-              component={BusMain}
-              options={{
-                headerShown: false,
-                tabBarIcon: ({ color, size = 26 }) => (
-                  <MaterialCommunityIcons
-                    name="bus"
-                    color={color}
-                    size={size}
-                  />
-                ),
-              }}
-            />
-            <Tab.Screen
-              name="Subway"
-              component={SubwayMain}
-              options={{
-                headerShown: false,
-                tabBarIcon: ({ color, size = 26 }) => (
-                  <MaterialCommunityIcons
-                    name="subway-variant"
-                    color={color}
-                    size={size}
-                  />
-                ),
-              }}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
+        <LocationProvider>
+          <NavigationContainer>
+            <Tab.Navigator initialRouteName="Bus" shifting={true}>
+              <Tab.Screen
+                name="Bus"
+                component={BusMain}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, size = 26 }) => (
+                    <MaterialCommunityIcons
+                      name="bus"
+                      color={color}
+                      size={size}
+                    />
+                  ),
+                }}
+              />
+              <Tab.Screen
+                name="Subway"
+                component={SubwayMain}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, size = 26 }) => (
+                    <MaterialCommunityIcons
+                      name="subway-variant"
+                      color={color}
+                      size={size}
+                    />
+                  ),
+                }}
+              />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </LocationProvider>
       </QueryClientProvider>
     </>
   );

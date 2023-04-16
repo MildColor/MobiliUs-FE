@@ -3,7 +3,7 @@ import { View, Image } from "react-native";
 import { Circle, Marker } from "react-native-maps";
 import styled from "styled-components/native";
 
-const MylocationMarker = ({ coordinate, title, radius }) => {
+const MylocationMarker = ({ coordinate, title, radius = 0 }) => {
   return (
     <>
       <Marker

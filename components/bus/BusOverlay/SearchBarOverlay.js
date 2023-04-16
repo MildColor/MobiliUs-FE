@@ -40,7 +40,7 @@ const SearchBarOverlay = ({
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity
+      <ItemWrapper
         onPress={() => {
           setIsOpenList(false);
           setMarkers([{ ...item }]);
@@ -52,12 +52,10 @@ const SearchBarOverlay = ({
           });
         }}
       >
-        <ItemWrapperView>
-          <ItemNameText numberOfLines={1} ellipsizeMode="tail">
-            {item.stationName}
-          </ItemNameText>
-        </ItemWrapperView>
-      </TouchableOpacity>
+        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+          {item.stationName}
+        </ItemNameText>
+      </ItemWrapper>
     );
   };
 
@@ -123,7 +121,7 @@ const StationListFlatList = styled(FlatList)`
   margin-top: 45px;
 `;
 
-const ItemWrapperView = styled(View)`
+const ItemWrapper = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
