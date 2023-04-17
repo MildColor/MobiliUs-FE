@@ -2,7 +2,7 @@ import { api } from "./axiosConfig";
 
 export const busApis = {
   getBusArrival: async (stationNum) =>
-    await api.get(`/bus/arrival?stationNum=${stationNum}`),
+    await api.get(`/bus/arrival/seoul?stationNum=${stationNum}`),
 
   getSearchBusStation: async (stationName) =>
     await api.get(`/bus/search/busStation?station=${stationName}`),
