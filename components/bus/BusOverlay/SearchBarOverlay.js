@@ -33,6 +33,22 @@ const SearchBarOverlay = ({
     debouncingSearchWord(text);
   };
 
+  const onPressItem = (item) => {
+    setIsOpenList(false);
+    setMarkers([{ ...item }]);
+    setFocusedRegion({
+      latitude: item.latitude,
+      longitude: item.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    });
+  };
+
+  const onPressInput = () => {
+    setIsOpenList(true);
+    setIsOpenBusArrival(false);
+  };
+
   useEffect(() => {
     if (searchBusStations) {
       setMarkers([...searchBusStations?.data?.stationList]);
@@ -41,18 +57,7 @@ const SearchBarOverlay = ({
 
   const renderItem = ({ item }) => {
     return (
-      <ItemWrapper
-        onPress={() => {
-          setIsOpenList(false);
-          setMarkers([{ ...item }]);
-          setFocusedRegion({
-            latitude: item.latitude,
-            longitude: item.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          });
-        }}
-      >
+      <ItemWrapper onPress={() => onPressItem(item)}>
         <ItemNameText numberOfLines={1} ellipsizeMode="tail">
           {item.stationName}
         </ItemNameText>
@@ -61,14 +66,11 @@ const SearchBarOverlay = ({
   };
 
   return (
-    <Overlay height="70%" top="40px" yPadding="13%">
+    <Overlay height="70%" top="40px" xPadding="13%">
       <SearchInput
         placeholder="정류장 검색"
         onChangeText={onChangeText}
-        onPressIn={() => {
-          setIsOpenList(true);
-          setIsOpenBusArrival(false);
-        }}
+        onPressIn={() => onPressInput()}
       />
 
       {isOpenList && searchBusStations?.data?.stationList?.length !== 0 && (

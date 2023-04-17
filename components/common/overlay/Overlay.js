@@ -37,5 +37,5 @@ const OverlayWrapper = styled(View)`
   height: ${({ height }) => height};
   top: ${({ top }) => top};
   bottom: ${({ bottom }) => bottom};
-  padding: ${({ xPadding, yPadding }) => `${xPadding + " " + yPadding} `};
+  padding: ${({ xPadding, yPadding }) => `${yPadding + " " + xPadding} `};
 `;

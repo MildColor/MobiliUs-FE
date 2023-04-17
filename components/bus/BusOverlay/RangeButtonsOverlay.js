@@ -46,7 +46,7 @@ function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
   };
 
   return (
-    <Overlay height="30px" top="95px" yPadding="13%">
+    <Overlay height="30px" top="95px" xPadding="13%">
       <ButtonsFlatList
         horizontal={true}
         data={rangeTextsArray}

@@ -107,6 +107,7 @@ function BusMain() {
               }}
               title={marker.stationName}
               onPress={() => {
+                console.log("stationNum ", marker.stationNum);
                 setStationNum(marker.stationNum);
                 setIsOpenBusArrival(true);
               }}

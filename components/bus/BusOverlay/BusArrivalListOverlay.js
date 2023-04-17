@@ -17,24 +17,22 @@ const BusArrivalListOverlay = ({ stationNum }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => {}}>
-        <ItemWrapperView>
-          <ItemBusNumberText numberOfLines={1} ellipsizeMode="tail">
-            {item.busNumber}
-          </ItemBusNumberText>
-          <ItemNameText numberOfLines={1} ellipsizeMode="tail">
-            {item.arrivalMsg1}
-          </ItemNameText>
-          <ItemNameText numberOfLines={1} ellipsizeMode="tail">
-            {item.direction}
-          </ItemNameText>
-        </ItemWrapperView>
-      </TouchableOpacity>
+      <ItemWrapper>
+        <ItemBusNumberText numberOfLines={1} ellipsizeMode="tail">
+          {item.busNumber}
+        </ItemBusNumberText>
+        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+          {item.arrivalMsg1}
+        </ItemNameText>
+        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+          {item.direction}
+        </ItemNameText>
+      </ItemWrapper>
     );
   };
 
   return (
-    <Overlay height="70%" bottom="40px" yPadding="7%">
+    <Overlay height="70%" bottom="40px" xPadding="7%">
       <ArrivalListFlatList
         renderItem={renderItem}
         data={busArrivals?.data?.busList}
@@ -43,7 +41,7 @@ const BusArrivalListOverlay = ({ stationNum }) => {
         }
         ListHeaderComponent={
           <>
-            <ItemWrapperView>
+            <ItemWrapper>
               <HeaderBustNumberText numberOfLines={1} ellipsizeMode="tail">
                 버스번호
               </HeaderBustNumberText>
@@ -53,7 +51,7 @@ const BusArrivalListOverlay = ({ stationNum }) => {
               <HeaderNameText numberOfLines={1} ellipsizeMode="tail">
                 방면
               </HeaderNameText>
-            </ItemWrapperView>
+            </ItemWrapper>
           </>
         }
       />
@@ -69,7 +67,7 @@ const ArrivalListFlatList = styled(FlatList)`
   border-radius: 15px;
 `;
 
-const ItemWrapperView = styled(View)`
+const ItemWrapper = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   padding-left: 10px;
