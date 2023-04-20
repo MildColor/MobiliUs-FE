@@ -5,11 +5,7 @@ export const useGetSubwayStation = (station) => {
   return useQuery({
     queryKey: ["getSubwayStation ", station],
     queryFn: async () => {
-      const {
-        data: { stationList },
-      } = await subwayApis.getSubwayStation(station);
-
-      return stationList;
+      return await subwayApis.getSubwayStation(station);
     },
   });
 };

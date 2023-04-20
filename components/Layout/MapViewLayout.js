@@ -10,12 +10,14 @@ import styled from "styled-components";
 import { StatusBar } from "expo-status-bar";
 
 function MapViewLayout({ children, region, onPress }) {
+  const onPressMap = () => {};
+
   return (
     <MapViewContainer>
       <StMapView
         region={region}
         provider={PROVIDER_GOOGLE}
-        onPress={() => onPress()}
+        onPress={onPressMap}
       >
         {children}
       </StMapView>

@@ -12,7 +12,7 @@ import { StatusBar } from "expo-status-bar";
 
 import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 
-import MylocationMarker from "../components/common/marker/MylocationMarker";
+import MylocationMarker from "../components/common/Marker/MylocationMarker";
 import SearchBarOverlay from "../components/bus/BusOverlay/SearchBarOverlay";
 import BusArrivalListOverlay from "../components/bus/BusOverlay/BusArrivalListOverlay";
 import RangeButtonsOverlay from "../components/bus/BusOverlay/RangeButtonsOverlay";

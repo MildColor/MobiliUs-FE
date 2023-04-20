@@ -1,16 +1,13 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useGetSubwayArrival } from "../hooks/queries/subway/useGetSubwayArrival";
 import { useGetSubwayStation } from "../hooks/queries/subway/useGetSubwayStation";
 import { useGetSubwayStationOfLine } from "../hooks/queries/subway/useGetSubwayStationOfLine";
 import { LocationContext } from "../contexts/Location/LocationContext";
-import MylocationMarker from "../components/common/marker/MylocationMarker";
+import MylocationMarker from "../components/common/Marker/MylocationMarker";
 import MapViewLayout from "../components/Layout/MapViewLayout";
-import { Marker } from "react-native-maps";
-import Overlay from "../components/common/overlay/Overlay";
-import Input from "../components/common/Input/Input";
-import { debouncer } from "../utils/debouncing";
-import { TextInput } from "react-native";
-import BusSearchBar from "../components/subway/SubwayOverlay/BusSearchBar";
+import { Callout, Marker } from "react-native-maps";
+import SubwaySearchBar from "../components/subway/SubwayOverlay/SubwaySearchBar";
+import SubwayCalloutView from "../components/common/Callout/SubwayCalloutView";
 
 function SubwayMain() {
   const { location, setLocation } = useContext(LocationContext);
@@ -18,23 +15,38 @@ function SubwayMain() {
 
   const [markers, setMarkers] = useState([]);
 
+  console.log(markers);
+
+  const [focusedRegion, setFocusedRegion] = useState({
+    latitude: location?.coords.latitude,
+    longitude: location?.coords.longitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
+
   // const { data: subwayArrivalData } = useGetSubwayArrival(searchWord);
-  const { data: subwayStationData } = useGetSubwayStation("서울");
+  // const { data: subwayStationData } = useGetSubwayStation("서울");
   // const { data: subwayStationOfLineData } = useGetSubwayStationOfLine("1호선");
 
-  console.log("subwayStation", subwayStationData);
+  // console.log("subwayStation", subrwayStationData);
   // console.log("subwayStationOfLine", subwayStationOfLineData);
+
+  useEffect(() => {
+    if (location) {
+      setFocusedRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    }
+
+    return () => {};
+  }, []);
 
   return (
     <>
-      <MapViewLayout
-        region={{
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-      >
+      <MapViewLayout region={focusedRegion}>
         <MylocationMarker
           coordinate={{
             latitude: location.coords.latitude,
@@ -57,11 +69,18 @@ function SubwayMain() {
               // setStationNum(marker.stationNum);
               // setIsOpenBusArrival(true);
               // }}
-            />
+            >
+              <Callout>
+                <SubwayCalloutView {...marker} />
+              </Callout>
+            </Marker>
           );
         })}
       </MapViewLayout>
-      <BusSearchBar />
+      <SubwaySearchBar
+        setMarkers={setMarkers}
+        setFocusedRegion={setFocusedRegion}
+      />
     </>
   );
 }
