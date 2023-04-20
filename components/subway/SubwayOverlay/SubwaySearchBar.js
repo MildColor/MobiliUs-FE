@@ -13,10 +13,10 @@ function SubwaySearchBar({ setMarkers, setFocusedRegion }) {
   const [searchWord, setSearchWord] = useState(null);
   const [isOpenList, setIsOpenList] = useState(false);
 
-  //   const { data: subwayArrivalData } = useGetSubwayArrival(searchWord);
+  // const { data: subwayArrivalData } = useGetSubwayArrival(searchWord);
   const { data: subwayStationData } = useGetSubwayStation(searchWord);
 
-  console.log("subwayStationData", subwayStationData?.data);
+  // console.log("subwayStationData", subwayStationData?.data);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
@@ -90,7 +90,7 @@ const StationFlatList = styled(FlatList)`
   width: 100%;
   background-color: white;
   border-radius: 15px;
-  margin-top: 45px;
+  margin-top: 55px;
 `;
 
 const ItemWrapper = styled(TouchableOpacity)`
