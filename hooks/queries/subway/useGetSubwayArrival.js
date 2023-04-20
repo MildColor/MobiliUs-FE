@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { subwayApis } from "../../../axios/subway";
 
-export const useGetSubwayArrival = (stationName) => {
+export const useGetSubwayArrival = (station) => {
   return useQuery({
-    queryKey: ["getSubwayArrival ", stationName],
+    queryKey: ["getSubwayArrival ", station],
     queryFn: async () => {
-      return await subwayApis.getSubwayArrival(stationName);
+      const {
+        data: { stationName, subwayList },
+      } = await subwayApis.getSubwayArrival(station);
+      return { stationName, subwayList };
+      // return await subwayApis.getSubwayArrival(station);
     },
   });
 };

@@ -9,37 +9,39 @@ import {
   View,
 } from "react-native";
 import styled from "styled-components/native";
+import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
+import Overlay from "../../common/overlay/Overlay";
 
-const BusArrivalListOverlay = ({ data }) => {
+const BusArrivalListOverlay = ({ stationNum }) => {
+  const { data: busArrivals } = useGetBusArrival(stationNum);
+
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => {}}>
-        <ItemWrapperView>
-          <ItemBusNumberText numberOfLines={1} ellipsizeMode="tail">
-            {item.busNumber}
-          </ItemBusNumberText>
-          <ItemNameText numberOfLines={1} ellipsizeMode="tail">
-            {item.arrivalMsg1}
-          </ItemNameText>
-          <ItemNameText numberOfLines={1} ellipsizeMode="tail">
-            {item.direction}
-          </ItemNameText>
-        </ItemWrapperView>
-      </TouchableOpacity>
+      <ItemWrapper>
+        <ItemBusNumberText numberOfLines={1} ellipsizeMode="tail">
+          {item.busNumber}
+        </ItemBusNumberText>
+        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+          {item.arrivalMsg1}
+        </ItemNameText>
+        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+          {item.direction}
+        </ItemNameText>
+      </ItemWrapper>
     );
   };
 
   return (
-    <Container>
+    <Overlay height="70%" bottom="40px" xPadding="7%">
       <ArrivalListFlatList
         renderItem={renderItem}
-        data={data}
+        data={busArrivals?.data?.busList}
         keyExtractor={(item, idx) =>
           `${item.busRouteId + item.direction + idx}`
         }
         ListHeaderComponent={
           <>
-            <ItemWrapperView>
+            <ItemWrapper>
               <HeaderBustNumberText numberOfLines={1} ellipsizeMode="tail">
                 버스번호
               </HeaderBustNumberText>
@@ -49,27 +51,15 @@ const BusArrivalListOverlay = ({ data }) => {
               <HeaderNameText numberOfLines={1} ellipsizeMode="tail">
                 방면
               </HeaderNameText>
-            </ItemWrapperView>
+            </ItemWrapper>
           </>
         }
       />
-    </Container>
+    </Overlay>
   );
 };
 
 export default BusArrivalListOverlay;
-
-const Container = styled(View)`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  width: 100%;
-  height: 70%;
-  bottom: 50px;
-  padding-left: 7%;
-  padding-right: 7%;
-  margin-top: 10px;
-`;
 
 const ArrivalListFlatList = styled(FlatList)`
   width: 100%;
@@ -77,7 +67,7 @@ const ArrivalListFlatList = styled(FlatList)`
   border-radius: 15px;
 `;
 
-const ItemWrapperView = styled(View)`
+const ItemWrapper = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   padding-left: 10px;

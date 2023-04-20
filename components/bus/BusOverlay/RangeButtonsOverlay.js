@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FlatList,
   Image,
@@ -9,10 +9,25 @@ import {
 } from "react-native";
 import styled from "styled-components";
 import { rangeTextsArray } from "../../../constants/buttonTexts";
-import RangeButton from "../button/RangeButton";
+import RangeButton from "../../common/Button/RangeButton";
+import { LocationContext } from "../../../contexts/Location/LocationContext";
+import Overlay from "../../common/overlay/Overlay";
 
-function RangeButtonsOverlay({ setRadius }) {
+function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
+  const { location } = useContext(LocationContext);
+
   const [selectedId, setSelectedId] = useState();
+
+  const onPressItem = (item) => {
+    setSelectedId(item.id);
+    setRadius(item.range);
+    setFocusedRegion({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    });
+  };
 
   const renderItem = ({ item }) => {
     const borderColor = item.id === selectedId ? "#F9AC38" : "white";
@@ -21,10 +36,7 @@ function RangeButtonsOverlay({ setRadius }) {
     return (
       <RangeButton
         item={item}
-        onPress={() => {
-          setSelectedId(item.id);
-          setRadius(item.range);
-        }}
+        onPress={() => onPressItem(item)}
         color={color}
         borderColor={borderColor}
       >
@@ -34,30 +46,18 @@ function RangeButtonsOverlay({ setRadius }) {
   };
 
   return (
-    <Container>
+    <Overlay height="30px" top="95px" xPadding="13%">
       <ButtonsFlatList
         horizontal={true}
         data={rangeTextsArray}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
-    </Container>
+    </Overlay>
   );
 }
 
 export default RangeButtonsOverlay;
-
-const Container = styled(View)`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  width: 100%;
-  height: 30px;
-  top: 85px;
-  padding-left: 13%;
-  padding-right: 13%;
-  margin-top: 10px;
-`;
 
 const ButtonsFlatList = styled(FlatList)`
   width: 100%;

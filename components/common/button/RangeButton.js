@@ -1,14 +1,18 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import styled from "styled-components";
 
-export function RangeButton({ onPress, item, children, color, borderColor }) {
+const RangeButton = forwardRef((props, ref) => {
   return (
-    <Container onPress={onPress} borderColor={borderColor}>
-      <ButtonText color={color}>{children}</ButtonText>
+    <Container
+      onPress={props.onPress}
+      borderColor={props.borderColor}
+      ref={ref}
+    >
+      <ButtonText color={props.color}>{props.children}</ButtonText>
     </Container>
   );
-}
+});
 
 export default RangeButton;
 
@@ -16,9 +20,9 @@ const Container = styled(TouchableOpacity)`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
   width: 50px;
   height: 25px;
-  background-color: white;
   border-radius: 12px;
   margin-right: 7px;
   border-color: ${(props) => props.borderColor};

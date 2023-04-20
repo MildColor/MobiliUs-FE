@@ -7,5 +7,9 @@ export const useGetBusArrival = (stationNum) => {
     queryFn: async () => {
       return await busApis.getBusArrival(stationNum);
     },
+    onError: async (error) => {
+      console.log("getBusArrival", error);
+    },
+    refetchInterval: 10000,
   });
 };

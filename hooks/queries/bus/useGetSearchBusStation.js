@@ -7,5 +7,8 @@ export const useGetSearchBusStation = (stationName) => {
     queryFn: async () => {
       return await busApis.getSearchBusStation(stationName);
     },
+    onError: async (error) => {
+      console.log("getSearchBusStation", error);
+    },
   });
 };
