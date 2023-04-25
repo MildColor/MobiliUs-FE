@@ -9,14 +9,12 @@ import { useGetSubwayStation } from "../../../hooks/queries/subway/useGetSubwayS
 import { subwayApis } from "../../../axios/subway";
 import styled from "styled-components";
 
-function SubwaySearchBar({ setMarkers, setFocusedRegion }) {
+function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
   const [searchWord, setSearchWord] = useState(null);
   const [isOpenList, setIsOpenList] = useState(false);
 
-  // const { data: subwayArrivalData } = useGetSubwayArrival(searchWord);
   const { data: subwayStationData } = useGetSubwayStation(searchWord);
-
-  // console.log("subwayStationData", subwayStationData?.data);
+  console.log("subwayStationData", subwayStationData?.data);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
@@ -36,6 +34,7 @@ function SubwaySearchBar({ setMarkers, setFocusedRegion }) {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
+    setStationName(item.stationName);
   };
 
   const onPressInput = () => {

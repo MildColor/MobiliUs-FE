@@ -11,14 +11,16 @@ import SubwayCalloutView from "../components/common/Callout/SubwayCalloutView";
 import RouteSettingOverlay from "../components/subway/SubwayOverlay/RouteSettingOverlay";
 import { ARRIVAL_BUTTON, DEPARTURE_BUTTON } from "../constants/selectedButton";
 import { useGetTravelTime } from "../hooks/queries/subway/useGetTravelTime";
+import SubwayArrivalOverlay from "../components/subway/SubwayOverlay/SubwayArrivalOverlay";
 
 function SubwayMain() {
   const { location, setLocation } = useContext(LocationContext);
   // console.log(location);
 
   const [markers, setMarkers] = useState([]);
+  const [stationName, setStationName] = useState(null);
 
-  // console.log(markers);
+  console.log("markers", markers);
 
   const [focusedRegion, setFocusedRegion] = useState({
     latitude: location?.coords.latitude,
@@ -31,11 +33,13 @@ function SubwayMain() {
     departure: {},
     arrival: {},
   });
+
   const [selectedButtonId, setSelectedButtonId] = useState("");
 
-  // const { data: subwayArrivalData } = useGetSubwayArrival(searchWord);
   // const { data: subwayStationData } = useGetSubwayStation("서울");
   // const { data: subwayStationOfLineData } = useGetSubwayStationOfLine("1호선");
+  const { data: subwayArrivalData } = useGetSubwayArrival(stationName);
+
   const { data: travelInfo } = useGetTravelTime({
     departurePoint: subwayRoute.departure.stationName,
     departureLine: subwayRoute.departure.subwayLine,
@@ -43,8 +47,9 @@ function SubwayMain() {
     destinationLine: subwayRoute.arrival.subwayLine,
   });
   console.log("travelInfo", travelInfo);
-  console.log(subwayRoute.departure.stationName);
-  console.log(subwayRoute);
+  console.log("subwayArrivalData", subwayArrivalData?.data);
+  // console.log(subwayRoute);
+  // console.log(subwayRoute.departure.stationName);
 
   // console.log("subwayStation", subrwayStationData);
   // console.log("subwayStationOfLine", subwayStationOfLineData);
@@ -60,7 +65,7 @@ function SubwayMain() {
     }
   }, []);
 
-  const onPressMarker = (marker) => {
+  const onPressMarker = async (marker) => {
     console.log("marker", marker);
     if (selectedButtonId === DEPARTURE_BUTTON) {
       setSubwayRoute({ ...subwayRoute, departure: { ...marker } });
@@ -71,7 +76,7 @@ function SubwayMain() {
     }
   };
 
-  // console.log("subwayRoute", subwayRoute);
+  console.log("subwayRoute", subwayRoute);
   return (
     <>
       <MapViewLayout region={focusedRegion}>
@@ -104,13 +109,19 @@ function SubwayMain() {
       <SubwaySearchBar
         setMarkers={setMarkers}
         setFocusedRegion={setFocusedRegion}
+        setStationName={setStationName}
       />
 
       <RouteSettingOverlay
         selectedButtonId={selectedButtonId}
         setSelectedButtonId={setSelectedButtonId}
         subwayRoute={subwayRoute}
+        setSubwayRoute={setSubwayRoute}
       />
+
+      {subwayArrivalData?.data && (
+        <SubwayArrivalOverlay subwayArrivalData={subwayArrivalData?.data} />
+      )}
     </>
   );
 }
