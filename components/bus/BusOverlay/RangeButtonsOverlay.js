@@ -34,14 +34,16 @@ function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
     const color = item.id === selectedId ? "#F9AC38" : "black";
 
     return (
-      <RangeButton
-        item={item}
-        onPress={() => onPressItem(item)}
-        color={color}
-        borderColor={borderColor}
-      >
-        {item.text}
-      </RangeButton>
+      <ButtonDivider>
+        <RangeButton
+          item={item}
+          onPress={() => onPressItem(item)}
+          color={color}
+          borderColor={borderColor}
+        >
+          {item.text}
+        </RangeButton>
+      </ButtonDivider>
     );
   };
 
@@ -61,4 +63,8 @@ export default RangeButtonsOverlay;
 
 const ButtonsFlatList = styled(FlatList)`
   width: 100%;
+`;
+const ButtonDivider = styled(View)`
+  flex: 1;
+  margin-right: 5px;
 `;

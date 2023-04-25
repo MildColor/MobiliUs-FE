@@ -9,7 +9,9 @@ const RangeButton = forwardRef((props, ref) => {
       borderColor={props.borderColor}
       ref={ref}
     >
-      <ButtonText color={props.color}>{props.children}</ButtonText>
+      <ButtonText color={props.color} numberOfLines={1} ellipsizeMode="tail">
+        {props.children}
+      </ButtonText>
     </Container>
   );
 });
@@ -21,12 +23,14 @@ const Container = styled(TouchableOpacity)`
   justify-content: center;
   align-items: center;
   background-color: white;
-  width: 50px;
+  /* width: 100px; */
+  max-width: 100px;
+  min-width: 50px;
   height: 25px;
   border-radius: 12px;
-  margin-right: 7px;
   border-color: ${(props) => props.borderColor};
   border-width: 2px;
+  padding: 0px 5px;
 `;
 const ButtonText = styled(Text)`
   color: ${(props) => props.color};
