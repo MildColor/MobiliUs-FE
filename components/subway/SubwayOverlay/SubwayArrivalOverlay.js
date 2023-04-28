@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Overlay from "../../common/overlay/Overlay";
 import styled from "styled-components";
 import { Dimensions, FlatList, PixelRatio, Text, View } from "react-native";
+import { flexRow } from "../../../styles/mixins";
 
 const subwayArrivalDatas = {
   stationName: "금정",
@@ -52,10 +53,11 @@ function SubwayArrivalOverlay({ subwayArrivalData }) {
         PixelRatio.roundToNearestPixel(Dimensions.get("window").width)
       );
     };
-    Dimensions.addEventListener("change", handleResize);
-    return () => {
-      Dimensions.removeEventListener("change", handleResize);
-    };
+    const widthChageListener = Dimensions.addEventListener(
+      "change",
+      handleResize
+    );
+    return () => widthChageListener.remove("change", handleResize);
   }, []);
 
   const renderItem = ({ item }) => {
@@ -63,28 +65,52 @@ function SubwayArrivalOverlay({ subwayArrivalData }) {
 
     return (
       <ItemWrapper width={itemSize}>
-        <Text> 도착지 : {item.arrivalArea}</Text>
-        <Text>{item.arrivalMsg}</Text>
-        <Text>현위치 : {item.currentLocation}</Text>
+        <ItemListText width="30%" numberOfLines={1} ellipsizeMode="tail">
+          {item.arrivalArea}
+        </ItemListText>
+        <ItemListText numberOfLines={1} ellipsizeMode="tail">
+          {item.locationNow}
+        </ItemListText>
+        <ItemListText numberOfLines={1} ellipsizeMode="tail">
+          {item.arrivalMsg}
+        </ItemListText>
       </ItemWrapper>
     );
   };
 
   return (
     <Overlay height="150px" bottom="15px" xPadding="7%">
-      <ListHeader>도착정보</ListHeader>
+      <ListHeader>도착정보 : {subwayArrivalData?.stationName}</ListHeader>
       <ArrivalFlatList
-        // horizontal={true}
         renderItem={renderItem}
-        data={subwayArrivalData?.subwayList}
+        data={subwayArrivalData?.subwayArrivalList}
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={true}
         pagingEnabled
-        ListEmptyComponent={<View>L</View>}
         snapToInterval={itemSize}
         snapToAlignment={"start"}
         decelerationRate={"fast"}
         bounces={false}
+        ListHeaderComponent={
+          <>
+            <ItemWrapper>
+              <HeaderText
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                fontSize="12px"
+                fontWeight="400"
+              >
+                도착지
+              </HeaderText>
+              <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
+                현위치
+              </HeaderText>
+              <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
+                메시지
+              </HeaderText>
+            </ItemWrapper>
+          </>
+        }
       />
     </Overlay>
   );
@@ -104,10 +130,39 @@ const ListHeader = styled(Text)`
   width: 100%;
   font-size: 20px;
   font-weight: 700;
-  margin: 0 10px 10px 5px;
+  margin: 0 0px 5px 10px;
 `;
 
 const ItemWrapper = styled(View)`
+  ${flexRow}
   width: 100%;
   padding: 10px;
+`;
+
+const HeaderText = styled(Text)`
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  width: ${({ width }) => width ?? "30%"};
+`;
+
+export const ItemListText = styled(Text)`
+  width: ${({ width }) => width ?? "35%"};
+  font-size: ${({ fontSize }) => fontSize ?? "12px"};
+  font-weight: ${({ fontWeight }) => fontWeight ?? "400"};
+  text-align: center;
+  color: black;
+  /* ${({ variant }) => {
+    switch (variant) {
+      case "header":
+        return css`
+          font-size: 18px;
+          font-weight: 700;
+          text-align: center;
+          width: ${({ width }) => width};
+        `;
+      //   default:
+      //     return css``;
+    }
+  }}; */
 `;
