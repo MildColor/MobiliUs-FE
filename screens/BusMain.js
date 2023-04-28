@@ -82,12 +82,19 @@ function BusMain() {
     })();
   }, []);
 
+  const onPressMap = () => {
+    console.log("onPressMap", isOpenBusArrival);
+    setIsOpenBusArrival(false);
+  };
+
+  const onPressMarker = (marker) => {
+    console.log("stationNum ", marker.stationNum);
+    setStationNum(marker.stationNum);
+    setIsOpenBusArrival(true);
+  };
   return (
     <>
-      <MapViewLayout
-        region={focusedRegion}
-        onPress={() => setIsOpenBusArrival(false)}
-      >
+      <MapViewLayout region={focusedRegion} onPress={() => onPressMap()}>
         <MylocationMarker
           coordinate={{
             latitude: location.coords.latitude,
@@ -106,11 +113,7 @@ function BusMain() {
                 longitude: marker.longitude,
               }}
               title={marker.stationName}
-              onPress={() => {
-                console.log("stationNum ", marker.stationNum);
-                setStationNum(marker.stationNum);
-                setIsOpenBusArrival(true);
-              }}
+              onPress={() => onPressMarker(marker)}
             />
           );
         })}
@@ -131,20 +134,3 @@ function BusMain() {
 }
 
 export default BusMain;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-  errorView: {
-    display: "flex",
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
