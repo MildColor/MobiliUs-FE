@@ -1,26 +1,24 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Marker, Polyline } from "react-native-maps";
 import { useGetSubwayArrival } from "../hooks/queries/subway/useGetSubwayArrival";
-import { useGetSubwayStation } from "../hooks/queries/subway/useGetSubwayStation";
-import { useGetSubwayStationOfLine } from "../hooks/queries/subway/useGetSubwayStationOfLine";
 import { LocationContext } from "../contexts/Location/LocationContext";
 import MylocationMarker from "../components/common/Marker/MylocationMarker";
 import MapViewLayout from "../components/Layout/MapViewLayout";
-import { Callout, Marker } from "react-native-maps";
 import SubwaySearchBar from "../components/subway/SubwayOverlay/SubwaySearchBar";
-import SubwayCalloutView from "../components/common/Callout/SubwayCalloutView";
 import RouteSettingOverlay from "../components/subway/SubwayOverlay/RouteSettingOverlay";
 import { ARRIVAL_BUTTON, DEPARTURE_BUTTON } from "../constants/selectedButton";
 import { useGetTravelTime } from "../hooks/queries/subway/useGetTravelTime";
 import SubwayArrivalOverlay from "../components/subway/SubwayOverlay/SubwayArrivalOverlay";
+import RouteTimeListOverlay from "../components/subway/SubwayOverlay/RouteTimeListOverlay";
 
 function SubwayMain() {
   const { location, setLocation } = useContext(LocationContext);
   // console.log(location);
 
   const [markers, setMarkers] = useState([]);
-  const [stationName, setStationName] = useState(null);
-
-  console.log("markers", markers);
+  const [stationName, setStationName] = useState("");
+  const [decodedPolyline, setDecodedPolyline] = useState([]);
+  const [isOpenSubwayArrival, setIsOpenSubwayArrival] = useState(false);
 
   const [focusedRegion, setFocusedRegion] = useState({
     latitude: location?.coords.latitude,
@@ -36,23 +34,16 @@ function SubwayMain() {
 
   const [selectedButtonId, setSelectedButtonId] = useState("");
 
-  // const { data: subwayStationData } = useGetSubwayStation("서울");
-  // const { data: subwayStationOfLineData } = useGetSubwayStationOfLine("1호선");
+  // 이부분 null point exception
+  // 요청 보낸거에 해당하는게 아무것도 없거나, 요청을 아무것도 안보내거나(null)
   const { data: subwayArrivalData } = useGetSubwayArrival(stationName);
 
-  const { data: travelInfo } = useGetTravelTime({
+  const { data: travelTime } = useGetTravelTime({
     departurePoint: subwayRoute.departure.stationName,
     departureLine: subwayRoute.departure.subwayLine,
     destinationPoint: subwayRoute.arrival.stationName,
     destinationLine: subwayRoute.arrival.subwayLine,
   });
-  console.log("travelInfo", travelInfo);
-  console.log("subwayArrivalData", subwayArrivalData?.data);
-  // console.log(subwayRoute);
-  // console.log(subwayRoute.departure.stationName);
-
-  // console.log("subwayStation", subrwayStationData);
-  // console.log("subwayStationOfLine", subwayStationOfLineData);
 
   useEffect(() => {
     if (location) {
@@ -66,7 +57,6 @@ function SubwayMain() {
   }, []);
 
   const onPressMarker = async (marker) => {
-    console.log("marker", marker);
     if (selectedButtonId === DEPARTURE_BUTTON) {
       setSubwayRoute({ ...subwayRoute, departure: { ...marker } });
     }
@@ -74,12 +64,17 @@ function SubwayMain() {
     if (selectedButtonId === ARRIVAL_BUTTON) {
       setSubwayRoute({ ...subwayRoute, arrival: { ...marker } });
     }
+
+    setIsOpenSubwayArrival(true);
   };
 
-  console.log("subwayRoute", subwayRoute);
+  const onPressMap = () => {
+    setIsOpenSubwayArrival(false);
+  };
+
   return (
     <>
-      <MapViewLayout region={focusedRegion}>
+      <MapViewLayout region={focusedRegion} onPress={() => onPressMap()}>
         <MylocationMarker
           coordinate={{
             latitude: location.coords.latitude,
@@ -98,13 +93,15 @@ function SubwayMain() {
               }}
               title={marker.stationName}
               onPress={() => onPressMarker(marker)}
-            >
-              {/* <Callout>
-                <SubwayCalloutView {...marker} />
-              </Callout> */}
-            </Marker>
+            ></Marker>
           );
         })}
+
+        <Polyline
+          coordinates={decodedPolyline}
+          strokeColor="#3CC344"
+          strokeWidth={6}
+        />
       </MapViewLayout>
       <SubwaySearchBar
         setMarkers={setMarkers}
@@ -119,8 +116,15 @@ function SubwayMain() {
         setSubwayRoute={setSubwayRoute}
       />
 
-      {subwayArrivalData?.data && (
+      {isOpenSubwayArrival && subwayArrivalData?.data && (
         <SubwayArrivalOverlay subwayArrivalData={subwayArrivalData?.data} />
+      )}
+
+      {travelTime && (
+        <RouteTimeListOverlay
+          travelTime={travelTime}
+          setDecodedPolyline={setDecodedPolyline}
+        />
       )}
     </>
   );
