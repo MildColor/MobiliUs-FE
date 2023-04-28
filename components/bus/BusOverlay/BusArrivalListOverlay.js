@@ -11,23 +11,26 @@ import {
 import styled from "styled-components/native";
 import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
 import Overlay from "../../common/overlay/Overlay";
+import * as Item from "../../common/FlatList/Item/ListItem";
 
 const BusArrivalListOverlay = ({ stationNum }) => {
   const { data: busArrivals } = useGetBusArrival(stationNum);
+  // console.log("busArrivals", busArrivals?.data);
 
   const renderItem = ({ item }) => {
+    console.log("item", item);
     return (
-      <ItemWrapper>
-        <ItemBusNumberText numberOfLines={1} ellipsizeMode="tail">
+      <Item.Wrapper>
+        <ItemListText width="25%" numberOfLines={1} ellipsizeMode="tail">
           {item.busNumber}
-        </ItemBusNumberText>
-        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+        </ItemListText>
+        <ItemListText numberOfLines={1} ellipsizeMode="tail">
           {item.arrivalMsg1}
-        </ItemNameText>
-        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+        </ItemListText>
+        <ItemListText numberOfLines={1} ellipsizeMode="tail">
           {item.direction}
-        </ItemNameText>
-      </ItemWrapper>
+        </ItemListText>
+      </Item.Wrapper>
     );
   };
 
@@ -35,23 +38,28 @@ const BusArrivalListOverlay = ({ stationNum }) => {
     <Overlay height="70%" bottom="40px" xPadding="7%">
       <ArrivalListFlatList
         renderItem={renderItem}
-        data={busArrivals?.data?.busList}
+        data={busArrivals?.data?.busArrivalList}
         keyExtractor={(item, idx) =>
           `${item.busRouteId + item.direction + idx}`
         }
         ListHeaderComponent={
           <>
-            <ItemWrapper>
-              <HeaderBustNumberText numberOfLines={1} ellipsizeMode="tail">
+            <Item.Wrapper>
+              <HeaderText
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                fontSize="12px"
+                fontWeight="400"
+              >
                 버스번호
-              </HeaderBustNumberText>
-              <HeaderNameText numberOfLines={1} ellipsizeMode="tail">
+              </HeaderText>
+              <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
                 도착예정
-              </HeaderNameText>
-              <HeaderNameText numberOfLines={1} ellipsizeMode="tail">
+              </HeaderText>
+              <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
                 방면
-              </HeaderNameText>
-            </ItemWrapper>
+              </HeaderText>
+            </Item.Wrapper>
           </>
         }
       />
@@ -67,32 +75,29 @@ const ArrivalListFlatList = styled(FlatList)`
   border-radius: 15px;
 `;
 
-const ItemWrapper = styled(TouchableOpacity)`
-  display: flex;
-  flex-direction: row;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-top: 13px;
-  margin-bottom: 13px;
-`;
-
-const ItemBusNumberText = styled(Text)`
-  font-size: 12px;
-  width: 25%;
-`;
-
-const ItemNameText = styled(Text)`
-  font-size: 12px;
-  width: 37%;
-`;
-
-const HeaderBustNumberText = styled(ItemBusNumberText)`
-  font-size: 18px;
+const HeaderText = styled(Text)`
+  font-size: 15px;
   font-weight: 700;
   text-align: center;
+  width: ${({ width }) => width ?? "30%"};
 `;
-const HeaderNameText = styled(ItemNameText)`
-  font-size: 18px;
-  font-weight: 700;
-  text-align: center;
+
+export const ItemListText = styled(Text)`
+  width: ${({ width }) => width ?? "37%"};
+  font-size: ${({ fontSize }) => fontSize ?? "12px"};
+  font-weight: ${({ fontWeight }) => fontWeight ?? "400"};
+  color: black;
+  /* ${({ variant }) => {
+    switch (variant) {
+      case "header":
+        return css`
+          font-size: 18px;
+          font-weight: 700;
+          text-align: center;
+          width: ${({ width }) => width};
+        `;
+      //   default:
+      //     return css``;
+    }
+  }}; */
 `;
