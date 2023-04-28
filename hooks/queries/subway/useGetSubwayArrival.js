@@ -11,5 +11,6 @@ export const useGetSubwayArrival = (station) => {
       // return { stationName, subwayList };
       return await subwayApis.getSubwayArrival(station);
     },
+    refetchInterval: 10000,
   });
 };
