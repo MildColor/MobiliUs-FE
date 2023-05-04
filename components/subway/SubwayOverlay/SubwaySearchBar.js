@@ -1,13 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useGetSubwayArrival } from "../../../hooks/queries/subway/useGetSubwayArrival";
 import { debouncer } from "../../../utils/debouncing";
-import Overlay from "../../common/overlay/Overlay";
 import Input from "../../common/Input/Input";
 import { FlatList, Image, Text, TouchableOpacity } from "react-native";
-import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchBusStation";
 import { useGetSubwayStation } from "../../../hooks/queries/subway/useGetSubwayStation";
-import { subwayApis } from "../../../axios/subway";
 import styled from "styled-components";
+import Overlay from "../../common/Overlay/Overlay";
 
 function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
   const [searchWord, setSearchWord] = useState(null);

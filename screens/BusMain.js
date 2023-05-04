@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, {
   Circle,
   PROVIDER_GOOGLE,
@@ -8,7 +7,6 @@ import MapView, {
   Polyline,
 } from "react-native-maps";
 import * as Location from "expo-location";
-import { StatusBar } from "expo-status-bar";
 
 import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 

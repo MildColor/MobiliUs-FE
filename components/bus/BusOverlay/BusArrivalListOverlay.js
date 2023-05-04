@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
-import Overlay from "../../common/overlay/Overlay";
+import Overlay from "../../common/Overlay/Overlay";
 import * as Item from "../../common/FlatList/Item/ListItem";
 
 const BusArrivalListOverlay = ({ stationNum }) => {

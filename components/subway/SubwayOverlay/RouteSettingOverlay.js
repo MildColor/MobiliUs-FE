@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import Overlay from "../../common/overlay/Overlay";
 import { View } from "react-native";
 import { flexRow } from "../../../styles/mixins";
 import RangeButton from "../../common/Button/RangeButton";
@@ -9,6 +8,7 @@ import {
   ARRIVAL_BUTTON,
   DEPARTURE_BUTTON,
 } from "../../../constants/selectedButton";
+import Overlay from "../../common/Overlay/Overlay";
 
 function RouteSettingOverlay({
   selectedButtonId,
