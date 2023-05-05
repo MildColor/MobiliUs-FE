@@ -28,7 +28,7 @@ function BusMain() {
   const [errorMsg, setErrorMsg] = useState(null);
 
   // 검색하기
-  const [stationNum, setStationNum] = useState("");
+  const [station, setStation] = useState({ stationId: "", localState: "" });
 
   const [focusedRegion, setFocusedRegion] = useState({
     latitude: 0,
@@ -86,8 +86,9 @@ function BusMain() {
   };
 
   const onPressMarker = (marker) => {
-    console.log("stationNum ", marker.stationNum);
-    setStationNum(marker.stationNum);
+    console.log("stationId ", marker.stationId);
+    console.log("localState ", marker.localState);
+    setStation({ stationId: marker.stationId, localState: marker.localState });
     setIsOpenBusArrival(true);
   };
   return (
@@ -126,7 +127,12 @@ function BusMain() {
         setFocusedRegion={setFocusedRegion}
       />
 
-      {isOpenBusArrival && <BusArrivalListOverlay stationNum={stationNum} />}
+      {isOpenBusArrival && (
+        <BusArrivalListOverlay
+          stationId={station.stationId}
+          localState={station.localState}
+        />
+      )}
     </>
   );
 }

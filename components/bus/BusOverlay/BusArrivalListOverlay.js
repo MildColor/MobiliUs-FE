@@ -13,8 +13,8 @@ import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
 import Overlay from "../../common/Overlay/Overlay";
 import * as Item from "../../common/FlatList/Item/ListItem";
 
-const BusArrivalListOverlay = ({ stationNum }) => {
-  const { data: busArrivals } = useGetBusArrival(stationNum);
+const BusArrivalListOverlay = ({ stationId, localState }) => {
+  const { data: busArrivals } = useGetBusArrival({ stationId, localState });
   // console.log("busArrivals", busArrivals?.data);
 
   const renderItem = ({ item }) => {
@@ -28,7 +28,7 @@ const BusArrivalListOverlay = ({ stationNum }) => {
           {item.arrivalMsg1}
         </ItemListText>
         <ItemListText numberOfLines={1} ellipsizeMode="tail">
-          {item.direction}
+          {item.locationNow !== "null" ? item.locationNow : "정보 없음"}
         </ItemListText>
       </Item.Wrapper>
     );
@@ -40,7 +40,7 @@ const BusArrivalListOverlay = ({ stationNum }) => {
         renderItem={renderItem}
         data={busArrivals?.data?.busArrivalList}
         keyExtractor={(item, idx) =>
-          `${item.busRouteId + item.direction + idx}`
+          `${item.routeId + item.locationNow + idx + item.busNumber}`
         }
         ListHeaderComponent={
           <>
