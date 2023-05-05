@@ -4,7 +4,7 @@ import { CalloutSubview } from "react-native-maps";
 import styled from "styled-components";
 
 function SubwayCalloutView({ ...props }) {
-  console.log("makers", props);
+  // console.log("makers", props);
   return (
     <CalloutWrapper>
       <ItemWrapper>

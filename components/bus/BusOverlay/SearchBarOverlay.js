@@ -23,7 +23,6 @@ const SearchBarOverlay = ({
   const [isOpenList, setIsOpenList] = useState(false);
 
   const { data: searchBusStations } = useGetSearchBusStation(searchWord);
-  console.log("searchBusStations", searchBusStations?.data?.busStationList);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),

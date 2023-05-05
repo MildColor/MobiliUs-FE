@@ -18,7 +18,7 @@ const BusArrivalListOverlay = ({ stationId, localState }) => {
   // console.log("busArrivals", busArrivals?.data);
 
   const renderItem = ({ item }) => {
-    console.log("item", item);
+    // console.log("item", item);
     return (
       <Item.Wrapper>
         <ItemListText width="25%" numberOfLines={1} ellipsizeMode="tail">

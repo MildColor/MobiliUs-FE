@@ -13,12 +13,15 @@ import RouteTimeListOverlay from "../components/subway/SubwayOverlay/RouteTimeLi
 
 function SubwayMain() {
   const { location, setLocation } = useContext(LocationContext);
-  // console.log(location);
 
   const [markers, setMarkers] = useState([]);
   const [stationName, setStationName] = useState("");
   const [decodedPolyline, setDecodedPolyline] = useState([]);
-  const [isOpenSubwayArrival, setIsOpenSubwayArrival] = useState(false);
+  const [isOpenOverlay, setIsOpenOverlay] = useState({
+    subwayArrival: false,
+    routeTime: false,
+  });
+  console.log(isOpenOverlay);
 
   const [focusedRegion, setFocusedRegion] = useState({
     latitude: location?.coords.latitude,
@@ -65,11 +68,15 @@ function SubwayMain() {
       setSubwayRoute({ ...subwayRoute, arrival: { ...marker } });
     }
 
-    setIsOpenSubwayArrival(true);
+    setIsOpenOverlay((prev) => {
+      return { ...prev, subwayArrival: true };
+    });
   };
 
   const onPressMap = () => {
-    setIsOpenSubwayArrival(false);
+    setIsOpenOverlay((prev) => {
+      return { ...prev, subwayArrival: false };
+    });
   };
 
   return (
@@ -107,6 +114,7 @@ function SubwayMain() {
         setMarkers={setMarkers}
         setFocusedRegion={setFocusedRegion}
         setStationName={setStationName}
+        setIsOpenOverlay={setIsOpenOverlay}
       />
 
       <RouteSettingOverlay
@@ -116,16 +124,18 @@ function SubwayMain() {
         setSubwayRoute={setSubwayRoute}
       />
 
-      {isOpenSubwayArrival && subwayArrivalData?.data && (
+      {isOpenOverlay.subwayArrival && subwayArrivalData?.data && (
         <SubwayArrivalOverlay subwayArrivalData={subwayArrivalData?.data} />
       )}
 
-      {travelTime && (
-        <RouteTimeListOverlay
-          travelTime={travelTime}
-          setDecodedPolyline={setDecodedPolyline}
-        />
-      )}
+      {travelTime &&
+        !isOpenOverlay.subwayArrival &&
+        isOpenOverlay.routeTime && (
+          <RouteTimeListOverlay
+            travelTime={travelTime}
+            setDecodedPolyline={setDecodedPolyline}
+          />
+        )}
     </>
   );
 }

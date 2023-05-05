@@ -81,13 +81,10 @@ function BusMain() {
   }, []);
 
   const onPressMap = () => {
-    console.log("onPressMap", isOpenBusArrival);
     setIsOpenBusArrival(false);
   };
 
   const onPressMarker = (marker) => {
-    console.log("stationId ", marker.stationId);
-    console.log("localState ", marker.localState);
     setStation({ stationId: marker.stationId, localState: marker.localState });
     setIsOpenBusArrival(true);
   };

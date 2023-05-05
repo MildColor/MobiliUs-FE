@@ -6,12 +6,17 @@ import { useGetSubwayStation } from "../../../hooks/queries/subway/useGetSubwayS
 import styled from "styled-components";
 import Overlay from "../../common/Overlay/Overlay";
 
-function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
+function SubwaySearchBar({
+  setMarkers,
+  setFocusedRegion,
+  setStationName,
+  setIsOpenOverlay,
+}) {
   const [searchWord, setSearchWord] = useState(null);
   const [isOpenList, setIsOpenList] = useState(false);
 
   const { data: subwayStationData } = useGetSubwayStation(searchWord);
-  console.log("subwayStationData", subwayStationData?.data);
+  // console.log("subwayStationData", subwayStationData);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
@@ -36,6 +41,17 @@ function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
 
   const onPressInput = () => {
     setIsOpenList(true);
+    setIsOpenOverlay((prev) => {
+      return { ...prev, routeTime: false, subwayArrival: false };
+    });
+    console.log("onPressInput");
+  };
+
+  const onPressOutInput = () => {
+    setIsOpenOverlay((prev) => {
+      return { ...prev, routeTime: true, subwayArrival: false };
+    });
+    console.log("onPressOutInput");
   };
 
   useEffect(() => {
@@ -60,6 +76,7 @@ function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
         placeholder="정거장 검색"
         onChangeText={onChangeText}
         onPressIn={onPressInput}
+        onPressOut={onPressOutInput}
       />
       {isOpenList && subwayStationData?.data.stationList?.length !== 0 && (
         <>

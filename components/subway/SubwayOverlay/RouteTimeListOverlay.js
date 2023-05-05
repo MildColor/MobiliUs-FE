@@ -8,13 +8,10 @@ import {
   PixelRatio,
   Text,
   TouchableOpacity,
-  View,
 } from "react-native";
 import polyline from "@mapbox/polyline";
 
 function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
-  // console.log("travelTime", travelTime);
-
   const [itemSize, setItemSize] = useState(
     PixelRatio.roundToNearestPixel(Dimensions.get("window").width)
   );
@@ -23,9 +20,12 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
   useEffect(() => {
     if (travelTime) {
       setTravelTimeArray([{ ...travelTime }]);
-      const decodedPolyline = polyline
-        .decode(travelTime.polyline)
+
+      const decodedPolyline = travelTime.polylineList
+        .map((polylineStr) => polyline.decode(polylineStr))
+        .flat(1)
         .map(([x, y]) => ({ latitude: x, longitude: y }));
+
       setDecodedPolyline([...decodedPolyline]);
     }
   }, [travelTime]);
@@ -44,8 +44,6 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
   }, []);
 
   const renderItem = ({ item }) => {
-    // console.log("item", item);
-
     return (
       <ItemWrapper width={itemSize}>
         <Text numberOfLines={1} ellipsizeMode="tail">
@@ -89,9 +87,6 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
 export default RouteTimeListOverlay;
 
 const ArrivalFlatList = styled(FlatList)`
-  /* width: 100%; */
-  /* background-color: white; */
-  /* border-radius: 15px; */
   height: 100%;
 `;
 
