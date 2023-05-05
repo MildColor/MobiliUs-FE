@@ -4,11 +4,11 @@ export default () => ({
     slug: "map-prac",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/iconMobilius.png",
+    icon: "./assets/icon.png",
     userInterfaceStyle: "light",
     splash: {
-      image: "./assets/splashMobiliUs.png",
-      resizeMode: "contain",
+      image: "./assets/splash.png",
+      resizeMode: "cover",
       backgroundColor: "#ffffff",
     },
     updates: {
