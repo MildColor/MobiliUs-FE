@@ -1,6 +1,6 @@
 export default () => ({
   expo: {
-    name: "map-prac",
+    name: "MobiliUs",
     slug: "map-prac",
     version: "1.0.0",
     orientation: "portrait",
