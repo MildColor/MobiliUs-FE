@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Overlay from "../../common/overlay/Overlay";
+import Overlay from "../../common/Overlay/Overlay";
 import styled from "styled-components";
 import {
   Dimensions,

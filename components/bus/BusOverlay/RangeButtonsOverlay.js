@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { rangeTextsArray } from "../../../constants/buttonTexts";
 import RangeButton from "../../common/Button/RangeButton";
 import { LocationContext } from "../../../contexts/Location/LocationContext";
-import Overlay from "../../common/overlay/Overlay";
+import Overlay from "../../common/Overlay/Overlay";
 
 function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
   const { location } = useContext(LocationContext);

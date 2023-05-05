@@ -11,7 +11,7 @@ import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
 import Constants from "expo-constants";
 import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchBusStation";
-import Overlay from "../../common/overlay/Overlay";
+import Overlay from "../../common/Overlay/Overlay";
 
 const SearchBarOverlay = ({
   setMarkers,
@@ -23,6 +23,7 @@ const SearchBarOverlay = ({
   const [isOpenList, setIsOpenList] = useState(false);
 
   const { data: searchBusStations } = useGetSearchBusStation(searchWord);
+  console.log("searchBusStations", searchBusStations?.data?.busStationList);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
@@ -73,11 +74,11 @@ const SearchBarOverlay = ({
         onPressIn={() => onPressInput()}
       />
 
-      {isOpenList && searchBusStations?.data?.stationList?.length !== 0 && (
+      {isOpenList && searchBusStations?.data?.busStationList?.length !== 0 && (
         <>
           <StationFlatList
             renderItem={renderItem}
-            data={searchBusStations?.data?.stationList}
+            data={searchBusStations?.data?.busStationList}
             keyExtractor={(item) => item.stationId}
           />
           <CloseButton onPress={() => setIsOpenList(!isOpenList)}>
