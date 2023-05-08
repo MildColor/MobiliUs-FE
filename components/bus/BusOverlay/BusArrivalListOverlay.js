@@ -57,7 +57,7 @@ const BusArrivalListOverlay = ({ stationId, localState }) => {
                 도착예정
               </HeaderText>
               <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
-                방면
+                현재 위치
               </HeaderText>
             </Item.Wrapper>
           </>
