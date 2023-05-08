@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  FlatList,
-  Image,
-  Modal,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 
 import styled from "styled-components/native";
 
@@ -20,10 +12,10 @@ export const Wrapper = styled(TouchableOpacity)`
 `;
 
 export const ListText = styled(Text)`
-  /* width: ${({ width }) => width ?? "37%"};
+  width: ${({ width }) => width ?? "37%"};
   font-size: ${({ fontSize }) => fontSize ?? "12px"};
   font-weight: ${({ fontWeight }) => fontWeight ?? "400"};
-  color: black; */
+  color: black;
   /* ${({ variant }) => {
     switch (variant) {
       case "header":
@@ -33,8 +25,8 @@ export const ListText = styled(Text)`
           text-align: center;
           width: ${({ width }) => width};
         `;
-      //   default:
-      //     return css``;
+      default:
+        return css``;
     }
   }}; */
 `;

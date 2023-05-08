@@ -48,8 +48,6 @@ function BusMain() {
 
   // console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
 
-  // console.log("markers", markers);
-
   useEffect(() => {
     if (nearbyBusStations) {
       setMarkers([...nearbyBusStations?.data?.stationList]);
@@ -67,7 +65,6 @@ function BusMain() {
 
         let location = await Location.getCurrentPositionAsync({});
         console.log("location", location);
-
         setLocation(location);
         setFocusedRegion({
           latitude: location.coords.latitude,
@@ -86,9 +83,12 @@ function BusMain() {
     (async () => {
       try {
         await Location.watchPositionAsync(
-          { distanceInterval: 1 },
+          {
+            distanceInterval: 1,
+            accuracy: Location.Accuracy.High,
+            timeInterval: 1000,
+          },
           (LocationObject) => {
-            console.log("LocationObject", LocationObject);
             setLocation(LocationObject);
           }
         );
@@ -148,6 +148,7 @@ function BusMain() {
           localState={station.localState}
         />
       )}
+      <Text>{location.coords.latitude + " " + location.coords.longitude}</Text>
     </>
   );
 }
