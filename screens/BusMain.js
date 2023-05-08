@@ -66,6 +66,8 @@ function BusMain() {
         }
 
         let location = await Location.getCurrentPositionAsync({});
+        console.log("location", location);
+
         setLocation(location);
         setFocusedRegion({
           latitude: location.coords.latitude,
@@ -76,6 +78,22 @@ function BusMain() {
       } catch (e) {
         setErrorMsg("Permission to access location was denied");
         Alert.alert("현 위치를 찾을 수 없습니다.");
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await Location.watchPositionAsync(
+          { distanceInterval: 1 },
+          (LocationObject) => {
+            console.log("LocationObject", LocationObject);
+            setLocation(LocationObject);
+          }
+        );
+      } catch (e) {
+        console.log(e);
       }
     })();
   }, []);

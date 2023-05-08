@@ -62,8 +62,15 @@ function SubwaySearchBar({
 
   const renderItem = ({ item }) => {
     return (
-      <ItemWrapper onPress={() => onPressItem(item)}>
-        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+      <ItemWrapper
+        onPress={() => onPressItem(item)}
+        subwayLine={item.subwayLine}
+      >
+        <ItemNameText
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          subwayLine={item.subwayLine}
+        >
           {item.stationName}
         </ItemNameText>
       </ItemWrapper>
