@@ -106,7 +106,7 @@ function SubwayMain() {
 
         <Polyline
           coordinates={decodedPolyline}
-          strokeColor="#3CC344"
+          strokeColor="#6040B2"
           strokeWidth={6}
         />
       </MapViewLayout>
