@@ -20,11 +20,8 @@ import MapViewLayout from "../components/Layout/MapViewLayout";
 function BusMain() {
   // location context, 내 위치 저장
   const { location, setLocation } = useContext(LocationContext);
-  // console.log(location);
   // 마커 찍기
   const [markers, setMarkers] = useState([]);
-  // 위치 찍기
-  // const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
   // 검색하기
@@ -109,14 +106,7 @@ function BusMain() {
   return (
     <>
       <MapViewLayout region={focusedRegion} onPress={() => onPressMap()}>
-        <MylocationMarker
-          coordinate={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          }}
-          title={"내 위치"}
-          radius={radius}
-        />
+        <MylocationMarker title={"내 위치"} radius={radius} />
 
         {markers.map((marker, idx) => {
           return (

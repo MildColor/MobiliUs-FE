@@ -82,13 +82,7 @@ function SubwayMain() {
   return (
     <>
       <MapViewLayout region={focusedRegion} onPress={() => onPressMap()}>
-        <MylocationMarker
-          coordinate={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          }}
-          title={"내 위치"}
-        />
+        <MylocationMarker title={"내 위치"} />
 
         {markers.map((marker, idx) => {
           return (
