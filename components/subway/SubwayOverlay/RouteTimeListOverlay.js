@@ -8,14 +8,20 @@ import {
   PixelRatio,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import polyline from "@mapbox/polyline";
+
+import { usePostSubwayBookmarkMutation } from "../../../hooks/queries/subway/usePostSubwayBookmarkMutation";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
   const [itemSize, setItemSize] = useState(
     PixelRatio.roundToNearestPixel(Dimensions.get("window").width)
   );
   const [travelTimeArray, setTravelTimeArray] = useState([{ ...travelTime }]);
+
+  const { mutate: subwayBookmarkMutate } = usePostSubwayBookmarkMutation();
 
   useEffect(() => {
     if (travelTime) {
@@ -43,6 +49,20 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
     return () => widthChageListener.remove("change", handleResize);
   }, []);
 
+  const onPressStar = (travelTimeArray) => {
+    console.log("travelTimeArray" + travelTimeArray[0].departure);
+
+    const { departure, destination, departureLine, destinationLine } =
+      travelTimeArray[0];
+
+    subwayBookmarkMutate({
+      departure,
+      destination,
+      departureLine,
+      destinationLine,
+    });
+  };
+
   const renderItem = ({ item }) => {
     return (
       <ItemWrapper width={itemSize}>
@@ -67,7 +87,15 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
 
   return (
     <Overlay height="150px" bottom="15px" xPadding="0">
-      <ListHeader>예상소요시간</ListHeader>
+      <HeaderWrapper>
+        <ListHeader>예상소요시간</ListHeader>
+        <Icon
+          name={"star"}
+          size={25}
+          color="#F9AC38"
+          onPress={() => onPressStar(travelTimeArray)}
+        />
+      </HeaderWrapper>
       <ArrivalFlatList
         horizontal={true}
         renderItem={renderItem}
@@ -91,10 +119,8 @@ const ArrivalFlatList = styled(FlatList)`
 `;
 
 const ListHeader = styled(Text)`
-  width: 100%;
   font-size: 20px;
   font-weight: 700;
-  margin: 0 0px 5px 15px;
 `;
 
 const ItemWrapper = styled(TouchableOpacity)`
@@ -104,4 +130,13 @@ const ItemWrapper = styled(TouchableOpacity)`
   background-color: white;
   padding: 10px;
   margin: 0 10px;
+`;
+
+const HeaderWrapper = styled(View)`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
 `;

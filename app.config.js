@@ -35,6 +35,8 @@ export default () => ({
     },
     extra: {
       API_URL: process.env.API_URL,
+      client_id: process.env.client_id,
+      redirect_uri: process.env.redirect_uri,
       eas: {
         projectId: "5526b943-5e6e-4b5b-918c-d7ae100c11fa",
       },

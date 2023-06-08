@@ -22,4 +22,21 @@ export const subwayApis = {
     await api.get(
       `/traffic/calculate/travel-time?departurePoint=${departurePoint}&departureLine=${departureLine}&destinationPoint=${destinationPoint}&destinationLine=${destinationLine}`
     ),
+
+  postSubwayBookmark: async ({
+    departure,
+    destination,
+    departureLine,
+    destinationLine,
+  }) => {
+    console.log("post", departure, destination, departureLine, destinationLine);
+    return await api.post(`/subway/bookmark`, {
+      departure,
+      destination,
+      departureLine,
+      destinationLine,
+    });
+  },
+
+  getBookmarkSubway: async () => await api.get(`/subway/bookmark/show`),
 };

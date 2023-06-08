@@ -16,7 +16,6 @@ function SubwaySearchBar({
   const [isOpenList, setIsOpenList] = useState(false);
 
   const { data: subwayStationData } = useGetSubwayStation(searchWord);
-  // console.log("subwayStationData", subwayStationData);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),

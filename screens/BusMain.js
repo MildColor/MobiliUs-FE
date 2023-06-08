@@ -16,10 +16,14 @@ import BusArrivalListOverlay from "../components/bus/BusOverlay/BusArrivalListOv
 import RangeButtonsOverlay from "../components/bus/BusOverlay/RangeButtonsOverlay";
 import { LocationContext } from "../contexts/Location/LocationContext";
 import MapViewLayout from "../components/Layout/MapViewLayout";
+import { BookmarkContext } from "../contexts/Bookmark/BookmarkContext";
 
 function BusMain() {
   // location context, 내 위치 저장
   const { location, setLocation } = useContext(LocationContext);
+  const { busBookmark, setBusBookmark } = useContext(BookmarkContext);
+
+  console.log(busBookmark);
   // 마커 찍기
   const [markers, setMarkers] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -43,13 +47,22 @@ function BusMain() {
     distance: radius,
   });
 
-  // console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
-
   useEffect(() => {
     if (nearbyBusStations) {
       setMarkers([...nearbyBusStations?.data?.stationList]);
     }
   }, [nearbyBusStations?.data?.stationList]);
+
+  useEffect(() => {
+    if (busBookmark !== null) {
+      setStation({
+        stationId: busBookmark.stationId,
+        localState: busBookmark.localState,
+      });
+      setMarkers([{ ...busBookmark }]);
+      setIsOpenBusArrival(true);
+    }
+  }, [busBookmark]);
 
   useEffect(() => {
     (async () => {
@@ -61,7 +74,6 @@ function BusMain() {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        console.log("location", location);
         setLocation(location);
         setFocusedRegion({
           latitude: location.coords.latitude,

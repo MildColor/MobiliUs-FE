@@ -21,7 +21,6 @@ function SubwayMain() {
     subwayArrival: false,
     routeTime: false,
   });
-  console.log(isOpenOverlay);
 
   const [focusedRegion, setFocusedRegion] = useState({
     latitude: location?.coords.latitude,

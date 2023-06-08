@@ -5,8 +5,6 @@ import { Dimensions, FlatList, PixelRatio, Text, View } from "react-native";
 import { flexRow } from "../../../styles/mixins";
 
 function SubwayArrivalOverlay({ subwayArrivalData }) {
-  // console.log("subwayArrivalData", subwayArrivalData);
-
   const [itemSize, setItemSize] = useState(
     PixelRatio.roundToNearestPixel(Dimensions.get("window").width)
   );
@@ -25,8 +23,6 @@ function SubwayArrivalOverlay({ subwayArrivalData }) {
   }, []);
 
   const renderItem = ({ item }) => {
-    // console.log("item", item);
-
     return (
       <ItemWrapper width={itemSize}>
         <ItemListText width="30%" numberOfLines={1} ellipsizeMode="tail">
