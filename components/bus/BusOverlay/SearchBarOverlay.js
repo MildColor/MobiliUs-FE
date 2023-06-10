@@ -10,7 +10,7 @@ import {
 import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
 import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchBusStation";
-import Overlay from "../../common/Overlay/Overlay";
+import Overlay from "../../common/overlay/Overlay";
 
 const SearchBarOverlay = ({
   setMarkers,

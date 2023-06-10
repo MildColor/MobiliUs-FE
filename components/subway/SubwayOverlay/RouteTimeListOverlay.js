@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Overlay from "../../common/Overlay/Overlay";
+import Overlay from "../../common/overlay/Overlay";
 import styled from "styled-components";
 import {
   Dimensions,
@@ -22,6 +22,7 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
   const [travelTimeArray, setTravelTimeArray] = useState([{ ...travelTime }]);
 
   const { mutate: subwayBookmarkMutate } = usePostSubwayBookmarkMutation();
+  console.log("travelTime", travelTime?.bookmarkState);
 
   useEffect(() => {
     if (travelTime) {
@@ -50,10 +51,15 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
   }, []);
 
   const onPressStar = (travelTimeArray) => {
-    console.log("travelTimeArray" + travelTimeArray[0].departure);
+    console.log("travelTimeArray" + travelTimeArray[0]);
 
-    const { departure, destination, departureLine, destinationLine } =
-      travelTimeArray[0];
+    const {
+      departure,
+      destination,
+      departureLine,
+      destinationLine,
+      bookmarkState,
+    } = travelTimeArray[0];
 
     subwayBookmarkMutate({
       departure,
@@ -81,6 +87,12 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
         <Text numberOfLines={1} ellipsizeMode="tail">
           예상 소요시간 : {item.durationTime}
         </Text>
+        <StarIcon
+          name={travelTime?.bookmarkState ? "star" : "star-o"}
+          size={25}
+          color="#F9AC38"
+          onPress={() => onPressStar(travelTimeArray)}
+        />
       </ItemWrapper>
     );
   };
@@ -89,12 +101,6 @@ function RouteTimeListOverlay({ travelTime, setDecodedPolyline }) {
     <Overlay height="150px" bottom="15px" xPadding="0">
       <HeaderWrapper>
         <ListHeader>예상소요시간</ListHeader>
-        <Icon
-          name={"star"}
-          size={25}
-          color="#F9AC38"
-          onPress={() => onPressStar(travelTimeArray)}
-        />
       </HeaderWrapper>
       <ArrivalFlatList
         horizontal={true}
@@ -130,6 +136,7 @@ const ItemWrapper = styled(TouchableOpacity)`
   background-color: white;
   padding: 10px;
   margin: 0 10px;
+  position: relative;
 `;
 
 const HeaderWrapper = styled(View)`
@@ -139,4 +146,10 @@ const HeaderWrapper = styled(View)`
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
+`;
+
+const StarIcon = styled(Icon)`
+  position: absolute;
+  right: 5px;
+  top: 5px;
 `;

@@ -4,7 +4,9 @@ import Input from "../../common/Input/Input";
 import { FlatList, Image, Text, TouchableOpacity } from "react-native";
 import { useGetSubwayStation } from "../../../hooks/queries/subway/useGetSubwayStation";
 import styled from "styled-components";
-import Overlay from "../../common/Overlay/Overlay";
+import Overlay from "../../common/overlay/Overlay";
+import getSubwayLineIcon from "../../../utils/getSubwayLineIcon";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function SubwaySearchBar({
   setMarkers,
@@ -16,7 +18,7 @@ function SubwaySearchBar({
   const [isOpenList, setIsOpenList] = useState(false);
 
   const { data: subwayStationData } = useGetSubwayStation(searchWord);
-
+  console.log("subwayStationData", subwayStationData?.data);
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
     []
@@ -60,11 +62,15 @@ function SubwaySearchBar({
   }, [subwayStationData?.data?.stationList]);
 
   const renderItem = ({ item }) => {
+    const iconInfo = getSubwayLineIcon(item);
+    console.log("iconInfo", iconInfo);
     return (
       <ItemWrapper
         onPress={() => onPressItem(item)}
         subwayLine={item.subwayLine}
       >
+        <Icon name={iconInfo.iconname} size={18} color={iconInfo.iconcolor} />
+
         <ItemNameText
           numberOfLines={1}
           ellipsizeMode="tail"
@@ -116,6 +122,7 @@ const ItemWrapper = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   padding-left: 10px;
   padding-right: 10px;
   margin-top: 13px;

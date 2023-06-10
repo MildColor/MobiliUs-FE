@@ -12,7 +12,7 @@ import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
-import Overlay from "../../common/Overlay/Overlay";
+import Overlay from "../../common/overlay/Overlay";
 import * as Item from "../../common/FlatList/Item/ListItem";
 import { usePostBusStationBookmarkMutation } from "../../../hooks/queries/bus/usePostBusStationBookmarkMutation";
 
@@ -28,7 +28,14 @@ const BusArrivalListOverlay = ({ stationId, localState }) => {
     longitude,
     localState,
   }) => {
-    console.log("onPressStar");
+    console.log(
+      "onPressStar",
+      stationId,
+      stationName,
+      latitude,
+      longitude,
+      localState
+    );
     busStationBookmarkMutate({
       stationId,
       stationName,
@@ -60,45 +67,59 @@ const BusArrivalListOverlay = ({ stationId, localState }) => {
     );
   };
 
-  return (
-    <Overlay height="70%" bottom="40px" xPadding="7%">
-      <TouchableOpacity style={{ alignSelf: "flex-end" }}>
-        <Icon
-          name={busArrivals?.data?.bookmarkState ? "star" : "star-o"}
-          size={25}
-          color="#F9AC38"
-          onPress={() => onPressStar(busArrivals?.data)}
-        ></Icon>
-      </TouchableOpacity>
-      <ArrivalListFlatList
-        renderItem={renderItem}
-        data={busArrivals?.data?.busArrivalList}
-        keyExtractor={(item, idx) =>
-          `${item.routeId + item.locationNow + idx + item.busNumber}`
-        }
-        ListHeaderComponent={
-          <>
-            <Item.Wrapper>
-              <HeaderText
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                fontSize="12px"
-                fontWeight="400"
-              >
-                버스번호
-              </HeaderText>
-              <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
-                도착예정
-              </HeaderText>
-              <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
-                현재 위치
-              </HeaderText>
-            </Item.Wrapper>
-          </>
-        }
-      />
-    </Overlay>
-  );
+  if (busArrivals?.data === undefined) {
+    return <></>;
+  }
+
+  if (busArrivals?.data?.busArrivalList.length === 0) {
+    return (
+      <Overlay height="70%" bottom="40px" xPadding="7%">
+        <AlertView>
+          <AlertText>정보가 없습니다!</AlertText>
+        </AlertView>
+      </Overlay>
+    );
+  } else {
+    return (
+      <Overlay height="70%" bottom="40px" xPadding="7%">
+        <TouchableOpacity style={{ alignSelf: "flex-end" }}>
+          <Icon
+            name={busArrivals?.data?.bookmarkState ? "star" : "star-o"}
+            size={25}
+            color="#F9AC38"
+            onPress={() => onPressStar(busArrivals?.data)}
+          ></Icon>
+        </TouchableOpacity>
+        <ArrivalListFlatList
+          renderItem={renderItem}
+          data={busArrivals?.data?.busArrivalList}
+          keyExtractor={(item, idx) =>
+            `${item.routeId + item.locationNow + idx + item.busNumber}`
+          }
+          ListHeaderComponent={
+            <>
+              <Item.Wrapper>
+                <HeaderText
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  fontSize="12px"
+                  fontWeight="400"
+                >
+                  버스번호
+                </HeaderText>
+                <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
+                  도착예정
+                </HeaderText>
+                <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
+                  현재 위치
+                </HeaderText>
+              </Item.Wrapper>
+            </>
+          }
+        />
+      </Overlay>
+    );
+  }
 };
 
 export default BusArrivalListOverlay;
@@ -128,6 +149,25 @@ export const ListText = styled(Text)`
   width: ${({ width }) => width ?? "37%"};
   font-size: 12px;
   font-weight: 400;
+`;
+
+const AlertView = styled(View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 40%;
+  margin: 0 auto;
+  width: 250px;
+  height: 100px;
+  border-radius: 20px;
+  background-color: white;
+`;
+
+const AlertText = styled(Text)`
+  font-size: 18px;
+  font-weight: 700;
 `;
 
 // export const ItemListText = styled(Text)`

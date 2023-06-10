@@ -23,7 +23,7 @@ function BusMain() {
   const { location, setLocation } = useContext(LocationContext);
   const { busBookmark, setBusBookmark } = useContext(BookmarkContext);
 
-  console.log(busBookmark);
+  // console.log(busBookmark);
   // 마커 찍기
   const [markers, setMarkers] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -88,30 +88,31 @@ function BusMain() {
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        await Location.watchPositionAsync(
-          {
-            distanceInterval: 1,
-            accuracy: Location.Accuracy.High,
-            timeInterval: 1000,
-          },
-          (LocationObject) => {
-            setLocation(LocationObject);
-          }
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       await Location.watchPositionAsync(
+  //         {
+  //           distanceInterval: 1,
+  //           accuracy: Location.Accuracy.High,
+  //           timeInterval: 1000,
+  //         },
+  //         (LocationObject) => {
+  //           setLocation(LocationObject);
+  //         }
+  //       );
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   })();
+  // }, []);
 
   const onPressMap = () => {
     setIsOpenBusArrival(false);
   };
 
   const onPressMarker = (marker) => {
+    console.log("onPressMarker", marker);
     setStation({ stationId: marker.stationId, localState: marker.localState });
     setIsOpenBusArrival(true);
   };

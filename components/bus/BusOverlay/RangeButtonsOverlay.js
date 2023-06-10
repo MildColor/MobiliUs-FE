@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import styled from "styled-components";
 import { rangeTextsArray } from "../../../constants/buttonTexts";
-import RangeButton from "../../common/Button/RangeButton";
+import RangeButton from "../../common/button/RangeButton";
 import { LocationContext } from "../../../contexts/Location/LocationContext";
-import Overlay from "../../common/Overlay/Overlay";
+import Overlay from "../../common/overlay/Overlay";
 
 function RangeButtonsOverlay({ setRadius, setFocusedRegion }) {
   const { location } = useContext(LocationContext);

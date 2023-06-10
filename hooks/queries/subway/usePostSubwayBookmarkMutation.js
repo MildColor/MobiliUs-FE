@@ -10,7 +10,8 @@ export const usePostSubwayBookmarkMutation = () => {
       return await subwayApis.postSubwayBookmark(payload);
     },
     onSuccess: (data, variables, context) => {
-      //   queryClient.invalidateQueries({ queryKey: ["getBusArrival"] });
+      queryClient.invalidateQueries({ queryKey: ["getTravelTime"] });
+      queryClient.invalidateQueries({ queryKey: ["getBookmarkSubway"] });
     },
     onError: (error) => {
       console.log("bookmark error: " + error);

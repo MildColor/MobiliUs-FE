@@ -10,7 +10,12 @@ export const usePostBusStationBookmarkMutation = () => {
       return await busApis.postBusStationBookmark(payload);
     },
     onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: ["getBusArrival"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getBusArrival"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getBookmarkBusStation"],
+      });
     },
     onError: (error) => {
       console.log("bookmark error: " + error);
