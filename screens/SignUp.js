@@ -25,7 +25,10 @@ function SignUp() {
             <SubText>더 많은 서비스를 위해 로그인 해주세요.</SubText>
           </TextContainer>
 
-          <GoogleSignInButton onPress={() => onPressGoogleLogin()}>
+          <GoogleSignInButton
+            onPress={() => onPressGoogleLogin()}
+            style={styles.button}
+          >
             <Image
               source={require("../assets/logo/google/google-mini-logo.png")}
               resizeMode="contain"
@@ -77,16 +80,19 @@ const GoogleSignInButton = styled(TouchableOpacity)`
   height: 50px;
   padding: 8px;
   margin: 0 auto;
-  border-width: 1px;
-  border-radius: 12px;
-  border-color: black;
+  /* border-width: 1px; */
+  /* border-radius: 12px;
+  border-color: black; */
   top: 50%;
 `;
-// const styles = StyleSheet.create({
-//   shadowProp: {
-//     shadowColor: "#171717",
-//     shadowOffset: { width: -2, height: 4 },
-//     shadowOpacity: 0.2,
-//     shadowRadius: 3,
-//   },
-// });
+
+const styles = StyleSheet.create({
+  button: {
+    shadowColor: "rgba(0,0,0, .4)", // IOS
+    shadowOffset: { height: 6, width: 6 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: "#fff",
+    elevation: 3, // Android
+  },
+});

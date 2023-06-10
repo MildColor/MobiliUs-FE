@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Overlay from "../../common/Overlay/Overlay";
+import Overlay from "../../common/overlay/Overlay";
 import styled from "styled-components";
 import { Dimensions, FlatList, PixelRatio, Text, View } from "react-native";
 import { flexRow } from "../../../styles/mixins";
