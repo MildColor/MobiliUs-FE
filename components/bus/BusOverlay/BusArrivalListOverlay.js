@@ -47,15 +47,15 @@ const BusArrivalListOverlay = ({ stationId, localState }) => {
       //   {item?.busNumber + " " + item?.arrivalMsg1 + " " + item?.locationNow}
       // </Text>
       <Wrapper>
-        <Item.ListText width="25%" numberOfLines={1} ellipsizeMode="tail">
+        <ListText width="25%" numberOfLines={1} ellipsizeMode="tail">
           {item.busNumber}
-        </Item.ListText>
-        <Item.ListText numberOfLines={1} ellipsizeMode="tail">
+        </ListText>
+        <ListText numberOfLines={1} ellipsizeMode="tail">
           {item.arrivalMsg1}
-        </Item.ListText>
-        <Item.ListText numberOfLines={1} ellipsizeMode="tail">
+        </ListText>
+        <ListText numberOfLines={1} ellipsizeMode="tail">
           {item.locationNow !== "null" ? item.locationNow : "정보 없음"}
-        </Item.ListText>
+        </ListText>
       </Wrapper>
     );
   };
@@ -122,6 +122,12 @@ export const Wrapper = styled(TouchableOpacity)`
   padding: 0 10px;
   margin: 13px 0;
   width: 100%;
+`;
+
+export const ListText = styled(Text)`
+  width: ${({ width }) => width ?? "37%"};
+  font-size: 12px;
+  font-weight: 400;
 `;
 
 // export const ItemListText = styled(Text)`
