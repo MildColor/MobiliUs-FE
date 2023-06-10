@@ -1,5 +1,12 @@
 import React, { useContext } from "react";
-import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Linking,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../contexts/Auth/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,6 +30,10 @@ function Profile() {
     navigation.navigate("SubwayBookmark");
   };
 
+  const onPressNFC = () => {
+    Linking.openURL("nfctutorial://");
+  };
+
   return (
     <SafeAreaView>
       <Container>
@@ -42,6 +53,10 @@ function Profile() {
         </Button>
         <Button onPress={onPressSubwayBookmark} style={styles.button}>
           <LogoText>SUBWAY BOOKMARK</LogoText>
+        </Button>
+
+        <Button onPress={onPressNFC} style={styles.button}>
+          <LogoText>NFC</LogoText>
         </Button>
       </Container>
     </SafeAreaView>
