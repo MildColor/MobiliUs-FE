@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { debouncer } from "../../../utils/debouncing";
-import Constants from "expo-constants";
 import { useGetSearchBusStation } from "../../../hooks/queries/bus/useGetSearchBusStation";
 import Overlay from "../../common/Overlay/Overlay";
 
@@ -18,12 +17,12 @@ const SearchBarOverlay = ({
   setFocusedRegion,
   setIsOpenBusArrival,
 }) => {
-  // const apiUrl = Constants.expoConfig.extra.API_URL;
   const [searchWord, setSearchWord] = useState("");
   const [isOpenList, setIsOpenList] = useState(false);
 
   const { data: searchBusStations } = useGetSearchBusStation(searchWord);
-  console.log("searchBusStations", searchBusStations?.data?.busStationList);
+
+  // console.log("searchBusStations", searchBusStations?.data?.busStationList);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
@@ -52,9 +51,9 @@ const SearchBarOverlay = ({
 
   useEffect(() => {
     if (searchBusStations) {
-      setMarkers([...searchBusStations?.data?.stationList]);
+      setMarkers([...searchBusStations?.data?.busStationList]);
     }
-  }, [searchBusStations?.data?.stationList]);
+  }, [searchBusStations?.data?.busStationList]);
 
   const renderItem = ({ item }) => {
     return (
@@ -122,7 +121,7 @@ const ItemWrapper = styled(TouchableOpacity)`
 
 const ItemNameText = styled(Text)`
   font-size: 15px;
-  width: 100%;
+  width: 90%;
 `;
 
 const CloseButton = styled(TouchableOpacity)`

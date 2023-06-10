@@ -9,33 +9,67 @@ import {
   View,
 } from "react-native";
 import styled from "styled-components/native";
+import Icon from "react-native-vector-icons/FontAwesome";
+
 import { useGetBusArrival } from "../../../hooks/queries/bus/useGetBusArrival";
 import Overlay from "../../common/Overlay/Overlay";
 import * as Item from "../../common/FlatList/Item/ListItem";
+import { usePostBusStationBookmarkMutation } from "../../../hooks/queries/bus/usePostBusStationBookmarkMutation";
 
 const BusArrivalListOverlay = ({ stationId, localState }) => {
   const { data: busArrivals } = useGetBusArrival({ stationId, localState });
-  // console.log("busArrivals", busArrivals?.data);
+  const { mutate: busStationBookmarkMutate } =
+    usePostBusStationBookmarkMutation();
+
+  const onPressStar = ({
+    stationId,
+    stationName,
+    latitude,
+    longitude,
+    localState,
+  }) => {
+    console.log("onPressStar");
+    busStationBookmarkMutate({
+      stationId,
+      stationName,
+      latitude,
+      longitude,
+      localState,
+    });
+  };
+
+  console.log("busArrival", busArrivals?.data);
 
   const renderItem = ({ item }) => {
-    console.log("item", item);
+    console.log("renderItem", item);
     return (
-      <Item.Wrapper>
-        <ItemListText width="25%" numberOfLines={1} ellipsizeMode="tail">
+      // <Text>
+      //   {item?.busNumber + " " + item?.arrivalMsg1 + " " + item?.locationNow}
+      // </Text>
+      <Wrapper>
+        <ListText width="25%" numberOfLines={1} ellipsizeMode="tail">
           {item.busNumber}
-        </ItemListText>
-        <ItemListText numberOfLines={1} ellipsizeMode="tail">
+        </ListText>
+        <ListText numberOfLines={1} ellipsizeMode="tail">
           {item.arrivalMsg1}
-        </ItemListText>
-        <ItemListText numberOfLines={1} ellipsizeMode="tail">
+        </ListText>
+        <ListText numberOfLines={1} ellipsizeMode="tail">
           {item.locationNow !== "null" ? item.locationNow : "정보 없음"}
-        </ItemListText>
-      </Item.Wrapper>
+        </ListText>
+      </Wrapper>
     );
   };
 
   return (
     <Overlay height="70%" bottom="40px" xPadding="7%">
+      <TouchableOpacity style={{ alignSelf: "flex-end" }}>
+        <Icon
+          name={busArrivals?.data?.bookmarkState ? "star" : "star-o"}
+          size={25}
+          color="#F9AC38"
+          onPress={() => onPressStar(busArrivals?.data)}
+        ></Icon>
+      </TouchableOpacity>
       <ArrivalListFlatList
         renderItem={renderItem}
         data={busArrivals?.data?.busArrivalList}
@@ -57,7 +91,7 @@ const BusArrivalListOverlay = ({ stationId, localState }) => {
                 도착예정
               </HeaderText>
               <HeaderText numberOfLines={1} ellipsizeMode="tail" width="35%">
-                방면
+                현재 위치
               </HeaderText>
             </Item.Wrapper>
           </>
@@ -82,22 +116,36 @@ const HeaderText = styled(Text)`
   width: ${({ width }) => width ?? "30%"};
 `;
 
-export const ItemListText = styled(Text)`
-  width: ${({ width }) => width ?? "37%"};
-  font-size: ${({ fontSize }) => fontSize ?? "12px"};
-  font-weight: ${({ fontWeight }) => fontWeight ?? "400"};
-  color: black;
-  /* ${({ variant }) => {
-    switch (variant) {
-      case "header":
-        return css`
-          font-size: 18px;
-          font-weight: 700;
-          text-align: center;
-          width: ${({ width }) => width};
-        `;
-      //   default:
-      //     return css``;
-    }
-  }}; */
+export const Wrapper = styled(TouchableOpacity)`
+  display: flex;
+  flex-direction: row;
+  padding: 0 10px;
+  margin: 13px 0;
+  width: 100%;
 `;
+
+export const ListText = styled(Text)`
+  width: ${({ width }) => width ?? "37%"};
+  font-size: 12px;
+  font-weight: 400;
+`;
+
+// export const ItemListText = styled(Text)`
+//   width: ${({ width }) => width ?? "37%"};
+//   font-size: ${({ fontSize }) => fontSize ?? "12px"};
+//   font-weight: ${({ fontWeight }) => fontWeight ?? "400"};
+//   color: black;
+//   /* ${({ variant }) => {
+//     switch (variant) {
+//       case "header":
+//         return css`
+//           font-size: 18px;
+//           font-weight: 700;
+//           text-align: center;
+//           width: ${({ width }) => width};
+//         `;
+//       //   default:
+//       //     return css``;
+//     }
+//   }}; */
+// `;

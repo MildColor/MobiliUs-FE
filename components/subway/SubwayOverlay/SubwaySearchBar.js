@@ -6,12 +6,16 @@ import { useGetSubwayStation } from "../../../hooks/queries/subway/useGetSubwayS
 import styled from "styled-components";
 import Overlay from "../../common/Overlay/Overlay";
 
-function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
+function SubwaySearchBar({
+  setMarkers,
+  setFocusedRegion,
+  setStationName,
+  setIsOpenOverlay,
+}) {
   const [searchWord, setSearchWord] = useState(null);
   const [isOpenList, setIsOpenList] = useState(false);
 
   const { data: subwayStationData } = useGetSubwayStation(searchWord);
-  console.log("subwayStationData", subwayStationData?.data);
 
   const debouncingSearchWord = useMemo(
     () => debouncer((value) => setSearchWord(value), 500),
@@ -36,6 +40,17 @@ function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
 
   const onPressInput = () => {
     setIsOpenList(true);
+    setIsOpenOverlay((prev) => {
+      return { ...prev, routeTime: false, subwayArrival: false };
+    });
+    console.log("onPressInput");
+  };
+
+  const onPressOutInput = () => {
+    setIsOpenOverlay((prev) => {
+      return { ...prev, routeTime: true, subwayArrival: false };
+    });
+    console.log("onPressOutInput");
   };
 
   useEffect(() => {
@@ -46,8 +61,15 @@ function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
 
   const renderItem = ({ item }) => {
     return (
-      <ItemWrapper onPress={() => onPressItem(item)}>
-        <ItemNameText numberOfLines={1} ellipsizeMode="tail">
+      <ItemWrapper
+        onPress={() => onPressItem(item)}
+        subwayLine={item.subwayLine}
+      >
+        <ItemNameText
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          subwayLine={item.subwayLine}
+        >
           {item.stationName}
         </ItemNameText>
       </ItemWrapper>
@@ -60,6 +82,7 @@ function SubwaySearchBar({ setMarkers, setFocusedRegion, setStationName }) {
         placeholder="정거장 검색"
         onChangeText={onChangeText}
         onPressIn={onPressInput}
+        onPressOut={onPressOutInput}
       />
       {isOpenList && subwayStationData?.data.stationList?.length !== 0 && (
         <>

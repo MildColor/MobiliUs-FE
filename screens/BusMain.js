@@ -16,15 +16,16 @@ import BusArrivalListOverlay from "../components/bus/BusOverlay/BusArrivalListOv
 import RangeButtonsOverlay from "../components/bus/BusOverlay/RangeButtonsOverlay";
 import { LocationContext } from "../contexts/Location/LocationContext";
 import MapViewLayout from "../components/Layout/MapViewLayout";
+import { BookmarkContext } from "../contexts/Bookmark/BookmarkContext";
 
 function BusMain() {
   // location context, 내 위치 저장
   const { location, setLocation } = useContext(LocationContext);
-  // console.log(location);
+  const { busBookmark, setBusBookmark } = useContext(BookmarkContext);
+
+  console.log(busBookmark);
   // 마커 찍기
   const [markers, setMarkers] = useState([]);
-  // 위치 찍기
-  // const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
   // 검색하기
@@ -46,15 +47,22 @@ function BusMain() {
     distance: radius,
   });
 
-  // console.log("nearbyBusStations", nearbyBusStations?.data?.stationList);
-
-  // console.log("markers", markers);
-
   useEffect(() => {
     if (nearbyBusStations) {
       setMarkers([...nearbyBusStations?.data?.stationList]);
     }
   }, [nearbyBusStations?.data?.stationList]);
+
+  useEffect(() => {
+    if (busBookmark !== null) {
+      setStation({
+        stationId: busBookmark.stationId,
+        localState: busBookmark.localState,
+      });
+      setMarkers([{ ...busBookmark }]);
+      setIsOpenBusArrival(true);
+    }
+  }, [busBookmark]);
 
   useEffect(() => {
     (async () => {
@@ -80,28 +88,37 @@ function BusMain() {
     })();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        await Location.watchPositionAsync(
+          {
+            distanceInterval: 1,
+            accuracy: Location.Accuracy.High,
+            timeInterval: 1000,
+          },
+          (LocationObject) => {
+            setLocation(LocationObject);
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, []);
+
   const onPressMap = () => {
-    console.log("onPressMap", isOpenBusArrival);
     setIsOpenBusArrival(false);
   };
 
   const onPressMarker = (marker) => {
-    console.log("stationId ", marker.stationId);
-    console.log("localState ", marker.localState);
     setStation({ stationId: marker.stationId, localState: marker.localState });
     setIsOpenBusArrival(true);
   };
   return (
     <>
       <MapViewLayout region={focusedRegion} onPress={() => onPressMap()}>
-        <MylocationMarker
-          coordinate={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          }}
-          title={"내 위치"}
-          radius={radius}
-        />
+        <MylocationMarker title={"내 위치"} radius={radius} />
 
         {markers.map((marker, idx) => {
           return (
@@ -133,6 +150,7 @@ function BusMain() {
           localState={station.localState}
         />
       )}
+      <Text>{location.coords.latitude + " " + location.coords.longitude}</Text>
     </>
   );
 }

@@ -8,10 +8,18 @@ function Input({
   bgColor,
   onChangeText,
   placeholder,
+  onPressIn,
+  onPressOut,
   ...props
 }) {
   return (
-    <StInput onChangeText={onChangeText} placeholder={placeholder} {...props} />
+    <StInput
+      onChangeText={onChangeText}
+      placeholder={placeholder}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      {...props}
+    />
   );
 }
 
