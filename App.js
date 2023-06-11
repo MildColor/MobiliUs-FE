@@ -141,7 +141,7 @@ export default function App() {
                       }}
                     />
                     <Tab.Screen
-                      name="profile"
+                      name="My Page"
                       component={ProfileRoutes}
                       options={{
                         headerShown: false,

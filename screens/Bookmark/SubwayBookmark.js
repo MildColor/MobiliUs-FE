@@ -13,7 +13,8 @@ import styled from "styled-components";
 import Overlay from "../../components/common/overlay/Overlay";
 import { LinearGradient } from "expo-linear-gradient";
 import { useGetSubwayBookmark } from "../../hooks/queries/subway/useGetSubwayBookmark";
-import Icon from "react-native-vector-icons/FontAwesome";
+import getSubwayLineIcon from "../../utils/getSubwayLineIcon";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function SubwayBookmark() {
   const navigation = useNavigation();
@@ -33,12 +34,35 @@ function SubwayBookmark() {
   };
 
   const rederItem = ({ item }) => {
+    console.log("item", item);
+    const departureItem = { subwayLine: item.departureLine };
+    const destinationItem = { subwayLine: item.destinationLine };
+
+    const DepartureIconInfo = getSubwayLineIcon(departureItem);
+    const DestinationIconInfo = getSubwayLineIcon(destinationItem);
+
     console.log("travelTime", item);
     return (
       <Item onPress={() => onPressBookmark(item)} style={styles.button}>
-        <DepartureText>{item?.departure}</DepartureText>
+        <TextWrapper>
+          <Icon
+            name={DepartureIconInfo.iconname}
+            size={18}
+            color={DepartureIconInfo.iconcolor}
+          />
+          <DepartureText>{item?.departure}</DepartureText>
+        </TextWrapper>
+
         <ArrowIcon name={"arrow-right"} size={15} color="#7DD1FF"></ArrowIcon>
-        <DestinationText>{item?.destination}</DestinationText>
+
+        <TextWrapper>
+          <Icon
+            name={DestinationIconInfo.iconname}
+            size={18}
+            color={DestinationIconInfo.iconcolor}
+          />
+          <DestinationText>{item?.destination}</DestinationText>
+        </TextWrapper>
       </Item>
     );
   };
@@ -76,14 +100,24 @@ const Item = styled(TouchableOpacity)`
   position: relative;
 `;
 
-const DepartureText = styled(Text)``;
+const TextWrapper = styled(View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const DepartureText = styled(Text)`
+  margin-left: 3px;
+`;
 
 const ArrowIcon = styled(Icon)`
   position: absolute;
   left: 150px;
 `;
 
-const DestinationText = styled(Text)``;
+const DestinationText = styled(Text)`
+  margin-left: 3px;
+`;
 
 const BackgroundView = styled(View)`
   flex: 1;
