@@ -3,7 +3,6 @@ import { View, Image } from "react-native";
 import { Circle, Marker } from "react-native-maps";
 import styled from "styled-components/native";
 import { LocationContext } from "../../../contexts/Location/LocationContext";
-import MylocationAnimatedPin from "../../animations/MylocationPin/MylocationAnimatedPin";
 
 const MylocationMarker = ({ title, radius = 0 }) => {
   const { location } = useContext(LocationContext);
@@ -18,7 +17,6 @@ const MylocationMarker = ({ title, radius = 0 }) => {
         title={title}
       >
         {/* <StImage source={{ uri: "https://ifh.cc/g/BqGBlm.png" }}></StImage> */}
-        <MylocationAnimatedPin />
       </Marker>
 
       <Circle

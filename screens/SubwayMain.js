@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Marker, Polyline } from "react-native-maps";
 import { useGetSubwayArrival } from "../hooks/queries/subway/useGetSubwayArrival";
 import { LocationContext } from "../contexts/Location/LocationContext";
-import MylocationMarker from "../components/common/Marker/MylocationMarker";
 import MapViewLayout from "../components/Layout/MapViewLayout";
 import SubwaySearchBar from "../components/subway/SubwayOverlay/SubwaySearchBar";
 import RouteSettingOverlay from "../components/subway/SubwayOverlay/RouteSettingOverlay";
@@ -11,6 +10,7 @@ import { useGetTravelTime } from "../hooks/queries/subway/useGetTravelTime";
 import SubwayArrivalOverlay from "../components/subway/SubwayOverlay/SubwayArrivalOverlay";
 import RouteTimeListOverlay from "../components/subway/SubwayOverlay/RouteTimeListOverlay";
 import { BookmarkContext } from "../contexts/Bookmark/BookmarkContext";
+import MylocationMarker from "../components/common/marker/MylocationMarker";
 
 function SubwayMain() {
   const { location, setLocation } = useContext(LocationContext);
@@ -74,6 +74,7 @@ function SubwayMain() {
       });
 
       setIsOpenOverlay({ ...isOpenOverlay, routeTime: true });
+
       if (decodedPolyline.length !== 0) {
         setFocusedRegion({
           ...focusedRegion,

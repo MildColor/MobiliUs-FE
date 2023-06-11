@@ -10,20 +10,19 @@ import * as Location from "expo-location";
 
 import { useGetNearbyBusStation } from "../hooks/queries/bus/useGetNearbyBusStation";
 
-import MylocationMarker from "../components/common/Marker/MylocationMarker";
 import SearchBarOverlay from "../components/bus/BusOverlay/SearchBarOverlay";
 import BusArrivalListOverlay from "../components/bus/BusOverlay/BusArrivalListOverlay";
 import RangeButtonsOverlay from "../components/bus/BusOverlay/RangeButtonsOverlay";
 import { LocationContext } from "../contexts/Location/LocationContext";
 import MapViewLayout from "../components/Layout/MapViewLayout";
 import { BookmarkContext } from "../contexts/Bookmark/BookmarkContext";
+import MylocationMarker from "../components/common/marker/MylocationMarker";
 
 function BusMain() {
   // location context, 내 위치 저장
   const { location, setLocation } = useContext(LocationContext);
   const { busBookmark, setBusBookmark } = useContext(BookmarkContext);
 
-  // console.log(busBookmark);
   // 마커 찍기
   const [markers, setMarkers] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
