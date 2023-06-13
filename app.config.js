@@ -6,6 +6,7 @@ export default () => ({
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
+    scheme: "map-prac",
     splash: {
       image: "./assets/splash.png",
       resizeMode: "cover",

@@ -75,16 +75,19 @@ function SubwayMain() {
 
       setIsOpenOverlay({ ...isOpenOverlay, routeTime: true });
 
-      if (decodedPolyline.length !== 0) {
-        setFocusedRegion({
-          ...focusedRegion,
-          latitude: decodedPolyline[0].latitude,
-          longitude: decodedPolyline[0].longitude,
-        });
-      }
       console.log("useEffect", decodedPolyline[0]);
     }
-  }, [subwayBookmark, decodedPolyline]);
+  }, [subwayBookmark]);
+
+  useEffect(() => {
+    if (decodedPolyline.length !== 0) {
+      setFocusedRegion({
+        ...focusedRegion,
+        latitude: decodedPolyline[0].latitude,
+        longitude: decodedPolyline[0].longitude,
+      });
+    }
+  }, [decodedPolyline]);
 
   const onPressMarker = async (marker) => {
     if (selectedButtonId === DEPARTURE_BUTTON) {

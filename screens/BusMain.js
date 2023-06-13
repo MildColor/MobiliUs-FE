@@ -150,7 +150,6 @@ function BusMain() {
           localState={station.localState}
         />
       )}
-      <Text>{location.coords.latitude + " " + location.coords.longitude}</Text>
     </>
   );
 }
