@@ -62,7 +62,7 @@ https://www.notion.so/d0bf23851823440293cbd27f9ffa242d?v=5e614c9688884c61a0f73d0
 ## 기술 스택 ( 선정 이유 )
 
 - React Native, Expo 
-  - javascript 및 React 익숙하여 낮은 러닝커브와 개발 속도
+  - javascript 및 React 익숙하여 낮은 러닝커브와 빠른 개발 속도
   - 크로스 플랫폼 개발 가능
   - Expo에서 지원하는 다양한 api, 해당 기능들로 충분히 개발 가능하다 결론
 
