@@ -80,7 +80,6 @@ https://www.notion.so/d0bf23851823440293cbd27f9ffa242d?v=5e614c9688884c61a0f73d0
  
 
 <br/>
-
-
-
+## 실제 동작 화면
+  <img src="https://github.com/MildColor/music-chat-extension/assets/96479626/4a05effc-37cf-4905-90a9-59cd74b6cddc">
 <br>
